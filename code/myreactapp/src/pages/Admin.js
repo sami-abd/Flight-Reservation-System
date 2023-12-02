@@ -1,7 +1,6 @@
 import { TextBox } from 'devextreme-react/text-box';
 import React, { useState, useCallback } from 'react';
 import 'devextreme/dist/css/dx.light.css';
-import EmailLog from "../components/EmailLog";
 import PasswordLog from "../components/PasswordLog";
 import Form from '../components/Form';
 const Admin = () => {
@@ -15,7 +14,6 @@ const Admin = () => {
     return (
         <div>
             < h1 > Admin Login</h1 >
-            <EmailLog />
             <PasswordLog />
             <Form />
 

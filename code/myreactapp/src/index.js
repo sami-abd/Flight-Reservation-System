@@ -7,6 +7,8 @@ import User from "./pages/User";
 import Navbar from "./components/Navbar";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Adminpage from "./pages/Adminpage";
+
 
 
 export default function App() {
@@ -17,6 +19,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="User" element={<User />} />
           <Route path="Admin" element={<Admin />} />
+          <Route path="AdminPage" element={<Adminpage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -43,3 +43,10 @@ body {
 .locationSelector {
     display: flex;
 }
+
+.Navbar {
+    size: 100px;
+    font-size: 30px;
+    color: black;
+    display: flex;
+}

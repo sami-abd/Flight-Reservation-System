@@ -30,6 +30,15 @@ app.get('/department', (req, res) => {
         return res.json(data);
     })
 })
+app.get('/api/v1/user/registered/', (req, res) => {
+    res.send({ status: 'false' })
+
+})
+app.post('/api/login', (req, res) => {
+    res.send("From ser")
+
+
+})
 
 app.listen(8081, () => {
     console.log("listening");
