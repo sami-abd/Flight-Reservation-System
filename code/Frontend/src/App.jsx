@@ -1,35 +1,13 @@
-import React, { useEffect, useState } from "react"
+// App.jsx
 
-function App() {
-  const [data, setData] = useState([])
-  useEffect(() => {
-    fetch('http://localhost:8081/department')
-      .then(res => res.json())
-      .then(data => setData(data))
-      .catch(err => console.log(err));
+import React from "react";
 
-  }, [])
+const About = () => {
   return (
-    <div style={{ padding: "50px" }}>
-      <table>
-        <thead>
-          <th>Dname</th>
-          <th>Dnumber</th>
-          <th>Mgr_ssn</th>
-        </thead>
-        <tbody>
-          {data.map((d, i) => (
-            <tr key={i}>
-              <td>{d.Dname}</td>
-              <td>{d.Dnumber}</td>
-              <td>{d.Mgr_ssn}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
+    <div>
+      <h1>About Page</h1>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default About;
