@@ -19,14 +19,15 @@ const User = () => {
     const login = async () => {
         let reponse = fetch("http://localhost:8081/api/v1/user/registered/", {
             method: "POST",
-            body: JSON.stringify(email, "&", password)
+            body: JSON.stringify(email, password)
         }).then((response) => {
-            if (reponse.status === 'false') {
+
+            if (reponse.data === 'false') {
                 throw new Error('Incorrect Email and/ or Password');
             } else {
                 sessionStorage.setItem("email", email);
                 sessionStorage.setItem('isLoggedIn', "true");
-                navigate('/User');
+                // navigate('/User');
                 return response.json()
             }
         })
@@ -34,7 +35,7 @@ const User = () => {
                 console.log(data)
                 sessionStorage.setItem("userId", data.id); // Add userId to sessionStorage, which is used for many purposes
                 sessionStorage.setItem("firstName", data.name); // Storages name in sessionStorage for display in Header
-                window.location.reload();
+                // window.location.reload();
             })
             .catch((error) => {
                 alert(error)

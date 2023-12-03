@@ -1,12 +1,14 @@
 const express = require('express');
 const mysql = require('mysql2')
 const cors = require('cors')
+const bodyParser = require('body-parser');
 
 const app = express()
 app.use(cors())
 
+app.use(bodyParser.json());
 const db = mysql.createConnection({
-    host: '127.0.0.1',
+    host: 'localhost',
     user: 'ensf614',
     password: 'root',
     database: 'companyensf608'
@@ -30,15 +32,22 @@ app.get('/department', (req, res) => {
         return res.json(data);
     })
 })
-app.get('/api/v1/user/registered/', (req, res) => {
-    res.send({ status: 'false' })
+app.post('/api/v1/user/registered/', (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-})
-app.post('/api/login', (req, res) => {
-    res.send("From ser")
+        // Now you have the email and password, and you can use them as needed
+        console.log('Email:', email);
+        console.log('Password:', password);
 
+        // Add your logic for user registration or authentication here
 
-})
+        res.status(200).json({ success: true, message: 'User registered successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
 
 app.listen(8081, () => {
     console.log("listening");

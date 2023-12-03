@@ -5,11 +5,11 @@ const DatePicker1 = () => {
     const [date, setDate] = useState(new Date());
     return (
         <div>
-            <DatePicker 
-            selected={date} 
-            onChange={(date) => setDate(date)}
-            minDate={"20"}
-            dateFormat={"MMMM d, yyyy"}
+            <DatePicker
+                selected={date}
+                onChange={(date) => setDate(date)}
+                minDate={"December, 10,2023"}
+                dateFormat={"YYYY/MM/DD"}
 
             />
         </div>
