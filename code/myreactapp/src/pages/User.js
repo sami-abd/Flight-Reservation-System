@@ -25,26 +25,23 @@ const User = () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({email, password})
-
-
-
-            //body: JSON.stringify(email, password)
+            body: JSON.stringify({ email, password })
         }).then((response) => {
 
-            if (response.data === 'false') {
+            if (response.status === 404) {
                 throw new Error('Incorrect Email and/ or Password');
             } else {
+                console.log("Going into this loop")
                 sessionStorage.setItem("email", email);
                 sessionStorage.setItem('isLoggedIn', "true");
-                // navigate('/User');
+                navigate('/User');
                 return response.json()
             }
         })
             .then((data) => {
                 console.log(data)
-                sessionStorage.setItem("userId", data.names); // Add userId to sessionStorage, which is used for many purposes
-                sessionStorage.setItem("firstName", data.name); // Storages name in sessionStorage for display in Header
+                sessionStorage.setItem("userId", data.email); // Add userId to sessionStorage, which is used for many purposes
+                sessionStorage.setItem("firstName", data.firstName); // Storages name in sessionStorage for display in Header
                 console.log(data)
                 // window.location.reload();
             })

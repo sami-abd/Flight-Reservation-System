@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.seat-map {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.seat {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.available {
+    background-color: #aaffaa;
+    /* Light green for available seats */
+}
+
+.occupied {
+    background-color: #ffaaaa;
+    /* Light red for occupied seats */
+}
+
+.selected {
+    background-color: #aaaaff;
+    /* Light blue for selected seats */
+}
+
+/* Add more styles or customize as needed */

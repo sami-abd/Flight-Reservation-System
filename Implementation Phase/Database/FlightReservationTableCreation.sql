@@ -1,7 +1,9 @@
 /*
 Create entire FlightReservation Database
 */
-
+drop database `companyensf608`;
+create database `companyensf608`;
+use companyensf608;
 CREATE TABLE COMPANY (
 	companyID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL

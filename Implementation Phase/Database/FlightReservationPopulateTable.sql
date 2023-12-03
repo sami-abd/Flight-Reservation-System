@@ -1,7 +1,7 @@
 /*
 Populate database with sample records
 */
-
+use companyensf608;
 INSERT INTO COMPANY (name)
 VALUES
 	("WestJet"),
@@ -35,8 +35,10 @@ INSERT INTO FLIGHT (
     aircraftID
 )
 VALUES 
-	("YYZ", "YVR", "2023-12-20", "10:45:00", 1),
-    ("YYC", "YOW", "2023-12-23", "16:20:00", 2);
+	("YYZ", "YVR", "2023/12/20", "10:45:00", 1),
+    ("YYC", "YEG", "2023/12/23", "16:20:00", 2),
+	("YYC", "YEG", "2023/12/23", "10:45:00", 1),
+    ("YYC", "YEG", "2023/12/23", "16:25:00", 2);
     
 INSERT INTO USER (
     firstName,

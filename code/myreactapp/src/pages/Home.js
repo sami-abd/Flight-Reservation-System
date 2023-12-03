@@ -26,16 +26,16 @@ const Home = () => {
     return <h1>
         <div>
             <div className="browsing">
-                <input type="radio" name="fselect" value="Onew" id="Onew" />
+                {/* <input type="radio" name="fselect" value="Onew" id="Onew" />
                 <label htmlFor="Onew">One Way</label>
                 <input type="radio" name="fselect" value="RoundT" id="RoundT" />
-                <label htmlFor="RoundT">Round Trip</label>
-                <h3 className="DateTitle">Departure</h3>
+                <label htmlFor="RoundT">Round Trip</label> */}
+                <h3 className="DateTitle">From</h3>
                 <DatePicker
                     selected={startDate}
                     onChange={(startDate) => setStartDate(startDate)}
-                    mindate={"2023/12/15"}
-                    dateFormat="yyyy/MM/dd"
+                    mindate={"2023-12-15"}
+                    dateFormat="yyyy-MM-dd"
                     showTimeSelect={false}
                 />
                 <div>
@@ -50,8 +50,8 @@ const Home = () => {
                         <option value="YYZ">Toronto</option>
                     </select>
                 </div>
-                <h3 className="DateTitle">Return</h3>
-                <DatePicker
+                <h3 className="DateTitle">To</h3>
+                {/*                 <DatePicker
                     selected={endDate}
                     onChange={(date) => setEndDate(date)}
                     selectsEnd
@@ -60,7 +60,7 @@ const Home = () => {
                     minDate={startDate}
                     showTimeSelect={false}
                     dateFormat="yyyy/MM/dd"
-                />
+                /> */}
                 <div>
                     <select
                         onChange={(e) => {

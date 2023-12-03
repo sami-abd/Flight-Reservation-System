@@ -12,6 +12,7 @@ import SelectFlights from "./pages/SelectFlight";
 import Registration from "./pages/Registration";
 import Payment from "./pages/Payment";
 import PaymentConfirmation from "./pages/PaymentConfirmation";
+import SelectSeat from "./pages/SelectSeat";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="Registration" element={<Registration />} />
           <Route path="Payment" element={<Payment />} />
           <Route path="PaymentConfirmation" element={<PaymentConfirmation />} />
+          <Route path="SelectSeat" element={<SelectSeat />} />
         </Route>
       </Routes>
     </BrowserRouter>
