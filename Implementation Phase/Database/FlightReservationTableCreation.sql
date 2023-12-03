@@ -1,6 +1,9 @@
 /*
 Create entire FlightReservation Database
 */
+DROP DATABASE IF EXISTS companyensf608;
+CREATE DATABASE companyensf608; 
+USE companyensf608;
 
 Create Database test;
 use test;
