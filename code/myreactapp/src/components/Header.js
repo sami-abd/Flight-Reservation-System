@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./header.css";
 
 import { useNavigate } from "react-router-dom";
@@ -11,53 +12,68 @@ import crownLogo from "../Assets/crownlogowhite.jpg";
 export const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); //useToggle();
   const navigate = useNavigate();
-  
+
   /**
-   * Check if user is logged in given the sessionStorage ite,
+   * Checks if there's a userId in sessionStorage.
+      If there is, it sets isLoggedIn to true.
    */
   const updateLogin = () => {
     if (sessionStorage.getItem("userId") != null) {
       setIsLoggedIn(true);
     }
-  }
+  };
 
   /**
-   * useEffect calls the updateLogin function() on page render
+   * Runs updateLogin on the initial render of the component.
+     It will check if the user is logged in whenever the component mounts.
    */
   useEffect(() => {
-    console.log("User Id:",sessionStorage.getItem("userId"));
+    console.log("User Id:", sessionStorage.getItem("userId"));
     updateLogin();
-  }, [])
+  }, []);
 
   /**
-   * Function is called when the logout button is clicked. 
+   * Function is called when the logout button is clicked.
    * Will log the user out by removing the associated sessionStorage item.
+   * Navigates user to home page.
    */
   const handleLogout = () => {
     sessionStorage.removeItem("userId");
     setIsLoggedIn(false);
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <div className="header_container">
-      <div className="corner"> {isLoggedIn? (<p>Welcome Registered User ({sessionStorage.getItem("firstName")})</p>) : (<p>Welcome Guest User!</p>)} </div>
+      <div className="corner">
+        {" "}
+        {isLoggedIn ? (
+          <p>Welcome Registered User ({sessionStorage.getItem("firstName")})</p>
+        ) : (
+          <p>Welcome Guest User!</p>
+        )}{" "}
+      </div>
       <div className="header_logo">
-        <a href="/">
+        <Link to="/">
+          {" "}
+          {/* This replaces the <a> tag */}
           <img src={crownLogo} className="logo" alt="crown logo" />
-        </a>
+        </Link>
       </div>
       <div className="header_login">
-        <button onClick={() => navigate("/")}>
-          Home
-          </button>
-          {isLoggedIn?
-          <button onClick={() => handleLogout()}>Logout</button> : 
-          <div> <button onClick={() => navigate("/user")}>Login</button> 
-          <button onClick={() => navigate("/register")}>Registration</button>
-          <button onClick={() => navigate("/AdminPage")}>Admin</button>  
+        <button onClick={() => navigate("/")}>Home</button>
+        {isLoggedIn ? (
+          <button onClick={() => handleLogout()}>Logout</button>
+        ) : (
+          <div>
+            <button onClick={() => navigate("/User")}>Login</button>
+            <button onClick={() => navigate("/Registration")}>
+              Registration
+            </button>
+            <button onClick={() => navigate("/AdminPage")}>Admin</button>
+            <button onClick={() => navigate("/Payment")}>Payment</button>
           </div>
-          }
+        )}
       </div>
     </div>
   );
@@ -66,10 +82,10 @@ export const Header = () => {
 // const useToggle = (initialState = false) => {
 //   // Initialize the state
 //   const [state, setState] = useState(initialState);
-  
+
 //   // Define and memorize toggler function in case we pass down the component,
 //   // This function change the boolean value to it's opposite value
 //   const toggle = useCallback(() => setState(state => !state), []);
-  
+
 //   return [state, toggle]
 // }
