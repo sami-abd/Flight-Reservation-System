@@ -53,8 +53,7 @@ const SelectFlights = () => {
         // Check if a flight is selected
         if (selectedFlight !== null) {
             // Get the selected flight's ID
-            const selectedFlightID = flights[selectedFlight].id;
-
+            const selectedFlightID = flights[selectedFlight].flightID;
             // Navigate to the 'SelectSeat' page and pass the flightID as state
             navigate('/SelectSeat', { state: { flightID: selectedFlightID } });
         } else {

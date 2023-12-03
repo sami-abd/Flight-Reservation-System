@@ -6,10 +6,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './../styles.css';
 import { createSearchParams, useNavigate } from "react-router-dom";
 const Home = () => {
-    const [startDate, setStartDate] = useState(new Date("2023/12/08"));
+    const [startDate, setStartDate] = useState(new Date("2023/12/23"));
     const [endDate, setEndDate] = useState(new Date("2023/12/10"));
     const [departure, setdeparture] = useState("YYC");
-    const [arrival, setarrival] = useState("YYC");
+    const [arrival, setarrival] = useState("YEG");
     const navigate = useNavigate();
     const handleSubmit = (e) => {
         if (departure === arrival) {
@@ -62,7 +62,7 @@ const Home = () => {
                     dateFormat="yyyy/MM/dd"
                 /> */}
                 <div>
-                    <select
+                    <select value={"YEG"}
                         onChange={(e) => {
                             setarrival(e.target.value);
                             console.log(e.target.value);

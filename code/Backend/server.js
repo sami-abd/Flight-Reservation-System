@@ -45,9 +45,10 @@ app.post("/api/v1/user/registered/", (req, res) => {
         // Now you have the email and password, and you can use them as needed
         console.log("Email:", email);
         console.log("Password:", password);
-        const query = `SELECT * FROM USER WHERE email = '${email}' AND password1 = '${password}'`;
+        const query = `SELECT * FROM USER WHERE email = '${email}' AND password = '${password}'`;
         db.query(query, (error, results) => {
             names = results;
+            console.log(names)
             // return res.json(results);
             if (names == null || names == "") {
                 res.status(404).json({ data: '0' })
@@ -111,19 +112,23 @@ app.post("/api/getflights", (req, res) => {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-    const seats = [
-        { id: 1, status: 'available' },
-        { id: 2, status: 'occupied' },
-        { id: 3, status: 'available' },
-        // ... add more seats
-    ];
 
-    app.get('/api/getseats', (req, res) => {
-        const flightID = req.query.flightID; // Assuming the flightID is passed as a query parameter
+});
+app.post('/api/getseats', (req, res) => {
+    const query = 'SELECT * FROM seat WHERE flightID = ?';
+    const flightID = req.body.flightID;
 
-        // You can fetch seats based on the flightID from your database
-        // For simplicity, using the example seat data
-        res.json({ seats });
+    db.query(query, [flightID], (error, results) => {
+        console.log(results)
+        if (error) {
+            console.error('Error executing MySQL query:', error);
+            res.status(500).json({ success: false, message: 'Internal Server Error' });
+        } else {
+            res.status(200).json({ success: true, message: 'Seats retrieved successfully', data: results });
+        }
     });
 });
 
+app.post('/api//bookings', (req, res) => {
+    res.status(200).json({ success: true, message: 'Seats retrieved successfully', data: results });
+});

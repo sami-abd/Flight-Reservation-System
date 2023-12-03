@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const Payment = ({ flightId, seatId, price, hasInsurance }) => {
+import { useNavigate, useLocation } from 'react-router-dom';
+const Payment = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { seat: seat, cost: cost, flightId: flightId } = location.state || {};
   // State for payment fields
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
-
+  console.log(seat)
   // Update state handlers for each field
   const updateCardNumber = (e) => setCardNumber(e.target.value);
   const updateExpiryDate = (e) => setExpiryDate(e.target.value);
@@ -26,9 +28,8 @@ const Payment = ({ flightId, seatId, price, hasInsurance }) => {
     // Assuming the card details are valid, prepare the booking information
     const bookingInfo = {
       flightId,
-      seatId,
-      price,
-      hasInsurance,
+      seat,
+      cost,
       cardNumber, // You would normally send a secure token instead
       expiryDate,
       cvv,
@@ -36,7 +37,7 @@ const Payment = ({ flightId, seatId, price, hasInsurance }) => {
 
     try {
       // Send a POST request to your backend endpoint
-      const response = await fetch("/api/bookings", {
+      const response = await fetch("http://localhost:8081/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,6 +66,7 @@ const Payment = ({ flightId, seatId, price, hasInsurance }) => {
   return (
     <div className="payment">
       <h1>Payment</h1>
+      <h2>Cost : {cost}</h2>
       <form className="payment-form" onSubmit={handlePaymentSubmission}>
         <label htmlFor="cardNumber">Card Number</label>
         <input
