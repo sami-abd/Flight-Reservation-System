@@ -145,11 +145,7 @@ app.post('/api/getseats', (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-app.post('/api//bookings', (req, res) => {
-    res.status(200).json({ success: true, message: 'Seats retrieved successfully', data: results });
-});
-=======
+
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for admin request to return all passengers on a flight (client provides a 'flightID'):
 app.post("/api/v1/user/getPassengerList/", (req, res) => {
@@ -255,11 +251,41 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
         // Print values to console (for debugging):
         console.log("bookingID:", bookingID);
 
-        // Define SQL query:
-        const query = `DELETE FROM BOOKING WHERE bookingID = ?`;
+
+/*         //-------------------------------------------------------
+        // Define SQL query #1: (update seat to empty) --> Do this before query #2
+        const query1 = `UPDATE SEAT AS S
+                        JOIN BOOKING AS B ON S.flightID = B.flightID AND S.seatID = B.seatID
+                        SET S.isAvailable = 1
+                        WHERE B.bookingID = ?`;
 
         // Run SQL query with provided value: 
-        db.query(query, [bookingID], (error, results) => {
+        db.query(query1, [bookingID], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'The seat was NOT successfully removed using that bookingID', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "The seat was successfully removed using that bookingID",
+                        data: results,
+                    });      
+            }
+        }); */
+
+        //-------------------------------------------------------
+        // Define SQL query #2: (delete booking row)
+        const query2 = `DELETE FROM BOOKING WHERE bookingID = ?`;
+
+        // Run SQL query with provided value: 
+        db.query(query2, [bookingID], (error, results) => {
 
             // Handle for when no results are returned
             if (results == null || results == "") {
@@ -278,6 +304,94 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
                     });
             }
         });
+    
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for a booking to be added from the booking table (client provides 'flightID', 'firstName', 'lastName', 'email', 'seatID', 'hasInsurance'):
+app.post("/api/v1/user/addBooking/", (req, res) => {
+    try {
+
+        // Grab values from body of json request:
+       //console.log(req.body);
+        const flightID = req.body.flightID;
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const email = req.body.email;
+        const seatID = req.body.seatID;
+        const hasInsurance = req.body.hasInsurance;
+
+        // Print values to console (for debugging):
+        console.log("flightID:", flightID);
+        console.log("firstName:", firstName);
+        console.log("lastName:", lastName);
+        console.log("email:", email);
+        console.log("seatID:", seatID);
+        console.log("hasInsurance:", hasInsurance);
+
+        //-------------------------------------------------------
+        // Define SQL query #1: (add booking row)
+        const query1 = `INSERT INTO BOOKING (flightID, firstName, lastName, email, seatID, hasInsurance) VALUES (?, ?, ?, ?, ?, ?)`;
+
+        // Run SQL query with provided value: 
+        db.query(query1, [flightID, firstName, lastName, email, seatID, hasInsurance], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'The booking was NOT successfully added', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "The booking has been successfully added and seat has been updated to 'unavailable'",
+                        data: results,
+                    });
+            }
+        });
+
+
+
+
+        //-------------------------------------------------------
+        // Define SQL query #2: (update seat to empty) --> Do this before query #2
+       // const query2 = `UPDATE SEAT AS S
+         //               JOIN BOOKING AS B ON S.flightID = B.flightID AND S.seatID = B.seatID
+           //             SET S.isAvailable = 1
+             //           WHERE B.bookingID = ?`;
+
+        // Run SQL query with provided value: 
+       // db.query(query2, [bookingID], (error, results) => {
+
+            // Handle for when no results are returned
+         //   if (results == null || results == "") {
+           //     res.status(404).json({ message: 'The seat was NOT successfully removed using that bookingID', data: '0' })
+            //}
+
+            // Handle for when 1 or more results are returned:
+           // else {
+            //    console.log(results)
+           //     res
+           //         .status(200)
+           //         .json({
+            //            success: true,
+           //             message: "The seat was successfully removed using that bookingID",
+          //              data: results,
+          //          });      
+      //      }
+     //   });
+
+
     
     // Catch errors with a response message:
     } catch (error) {
@@ -379,4 +493,5 @@ app.post("/api/v1/user/updatePromotion/", (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
->>>>>>> 8314bf215d4a60a2c6ea672f20f40e17f91bc95a
+
+
