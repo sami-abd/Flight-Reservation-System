@@ -17,12 +17,22 @@ const User = () => {
         }
     }
     const login = async () => {
-        let reponse = fetch("http://localhost:8081/api/v1/user/registered/", {
+        console.log(email)
+        console.log(password)
+        let response = await fetch("http://localhost:8081/api/v1/user/registered/", {
             method: "POST",
-            body: JSON.stringify(email, password)
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({email, password})
+
+
+
+            //body: JSON.stringify(email, password)
         }).then((response) => {
 
-            if (reponse.data === 'false') {
+            if (response.data === 'false') {
                 throw new Error('Incorrect Email and/ or Password');
             } else {
                 sessionStorage.setItem("email", email);

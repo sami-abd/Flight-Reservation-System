@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Adminpage from "./pages/Adminpage";
+import SelectFlights from "./pages/SelectFlight";
 import Registration from "./pages/Registration";
 import Payment from "./pages/Payment";
 import PaymentConfirmation from "./pages/PaymentConfirmation";
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="User" element={<User />} />
           <Route path="Admin" element={<Admin />} />
           <Route path="AdminPage" element={<Adminpage />} />
+          <Route path="selectFlights" element={<SelectFlights />} />
           <Route path="Registration" element={<Registration />} />
           <Route path="Payment" element={<Payment />} />
           <Route path="PaymentConfirmation" element={<PaymentConfirmation />} />

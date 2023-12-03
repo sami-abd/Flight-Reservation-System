@@ -9,7 +9,7 @@ const DatePicker1 = () => {
                 selected={date}
                 onChange={(date) => setDate(date)}
                 minDate={"December, 10,2023"}
-                dateFormat={"YYYY/MM/DD"}
+                dateFormat="yyyy/MM/dd"
 
             />
         </div>
