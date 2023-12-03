@@ -33,8 +33,9 @@ const User = () => {
         })
             .then((data) => {
                 console.log(data)
-                sessionStorage.setItem("userId", data.id); // Add userId to sessionStorage, which is used for many purposes
+                sessionStorage.setItem("userId", data.names); // Add userId to sessionStorage, which is used for many purposes
                 sessionStorage.setItem("firstName", data.name); // Storages name in sessionStorage for display in Header
+                console.log(data)
                 // window.location.reload();
             })
             .catch((error) => {

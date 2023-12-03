@@ -35,14 +35,20 @@ app.get('/department', (req, res) => {
 app.post('/api/v1/user/registered/', (req, res) => {
     try {
         const { email, password } = req.body;
+        let names = ""
 
         // Now you have the email and password, and you can use them as needed
         console.log('Email:', email);
         console.log('Password:', password);
+        const query = 'SELECT * FROM USER';
+        db.query(query, (error, results) => {
+            names = results;
+            // return res.json(results);
+        });
 
         // Add your logic for user registration or authentication here
 
-        res.status(200).json({ success: true, message: 'User registered successfully' });
+        res.status(200).json({ success: true, message: 'User registered successfully', name: names });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });

@@ -5,8 +5,6 @@ DROP DATABASE IF EXISTS companyensf608;
 CREATE DATABASE companyensf608; 
 USE companyensf608;
 
-Create Database test;
-use test;
 CREATE TABLE COMPANY (
 	companyID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
@@ -44,7 +42,8 @@ CREATE TABLE USER (
     email VARCHAR(50) NOT NULL,
     street VARCHAR(50) NOT NULL,
     city VARCHAR(50) NOT NULL,
-    province VARCHAR(50) NOT NULL
+    province VARCHAR(50) NOT NULL,
+    password1 VARCHAR(50) NOT NULL,
 );
 
 CREATE TABLE REGISTERED_USER (

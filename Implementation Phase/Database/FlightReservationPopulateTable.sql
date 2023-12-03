@@ -1,7 +1,7 @@
 /*
 Populate database with sample records
 */
-
+USE companyensf608;
 INSERT INTO COMPANY (name)
 VALUES
 	("WestJet"),
@@ -38,25 +38,28 @@ VALUES
     ("YYC", "YOW", "2023-12-23", 2);
     
 INSERT INTO USER (
+	userID,
     firstName,
     lastName,
     birthDate,
     email,
     street,
     city,
-    province
+    province,
+    password1
+    
 ) 
 VALUES 
-    ('Emily', 'Thompson', '1989-07-15', 'emily.thompson@example.com', '123 Maple Street', 'Toronto', 'ON'),
-    ('Jacob', 'Rodriguez', '1992-04-23', 'jacob.rodriguez@example.com', '456 Oak Avenue', 'Vancouver', 'BC'),
-    ('Olivia', 'Davis', '1985-11-09', 'olivia.davis@example.com', '789 Pine Lane', 'Montreal', 'QC'),
-    ('Ethan', 'Miller', '1990-09-30', 'ethan.miller@example.com', '101 Elm Boulevard', 'Calgary', 'AB'),
-    ('Sophia', 'Anderson', '1987-03-18', 'sophia.anderson@example.com', '234 Cedar Road', 'Ottawa', 'ON'),
-    ('Jackson', 'Smith', '1984-08-26', 'jackson.smith@example.com', '567 Birch Court', 'Edmonton', 'AB'),
-    ('Ava', 'Martinez', '1995-01-12', 'ava.martinez@example.com', '890 Walnut Drive', 'Quebec City', 'QC'),
-    ('Mason', 'Taylor', '1983-06-05', 'mason.taylor@example.com', '202 Spruce Street', 'Winnipeg', 'MB'),
-    ('Harper', 'Wilson', '1998-12-20', 'harper.wilson@example.com', '345 Sycamore Avenue', 'Halifax', 'NS'),
-    ('Liam', 'Johnson', '1982-10-08', 'liam.johnson@example.com', '678 Ash Lane', 'Saskatoon', 'SK');
+    ('Emily', 'Thompson', '1989-07-15', 'emily.thompson@example.com', '123 Maple Street', 'Toronto', 'ON', "21235"),
+    ('Jacob', 'Rodriguez', '1992-04-23', 'jacob.rodriguez@example.com', '456 Oak Avenue', 'Vancouver', 'BC',"21235"),
+    ('Olivia', 'Davis', '1985-11-09', 'olivia.davis@example.com', '789 Pine Lane', 'Montreal', 'QC',"21235"),
+    ('Ethan', 'Miller', '1990-09-30', 'ethan.miller@example.com', '101 Elm Boulevard', 'Calgary', 'AB',"21235"),
+    ('Sophia', 'Anderson', '1987-03-18', 'sophia.anderson@example.com', '234 Cedar Road', 'Ottawa', 'ON',"21235"),
+    ('Jackson', 'Smith', '1984-08-26', 'jackson.smith@example.com', '567 Birch Court', 'Edmonton', 'AB',"21235"),
+    ('Ava', 'Martinez', '1995-01-12', 'ava.martinez@example.com', '890 Walnut Drive', 'Quebec City', 'QC',"21235"),
+    ('Mason', 'Taylor', '1983-06-05', 'mason.taylor@example.com', '202 Spruce Street', 'Winnipeg', 'MB',"21235"),
+    ('Harper', 'Wilson', '1998-12-20', 'harper.wilson@example.com', '345 Sycamore Avenue', 'Halifax', 'NS',"21235"),
+    ('Liam', 'Johnson', '1982-10-08', 'liam.johnson@example.com', '678 Ash Lane', 'Saskatoon', 'SK',"21235");
     
 INSERT INTO REGISTERED_USER 
 VALUES 
