@@ -1,4 +1,4 @@
-// Brandon's code
+// Set up express and data
 const express = require("express");
 
 const mysql = require("mysql2");
@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: "localhost",
     user: "ensf614",
-    password: "root",
+    password: "ensf614",
     database: "companyensf608",
 });
 
@@ -27,6 +27,10 @@ app.get("/", (re, res) => {
     return res.json("From Backend Side");
 });
 
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+// 
 app.get("/department", (req, res) => {
     const sql = "SELECT *  FROM department";
     db.query(sql, (err, data) => {
@@ -34,17 +38,19 @@ app.get("/department", (req, res) => {
         return res.json(data);
     });
 });
+
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for login request:
 app.post("/api/v1/user/registered/", (req, res) => {
     try {
         console.log(req.body);
         const email = req.body.email;
         const password = req.body.password;
-        //const { email, password } = req.body;
         let names = "";
 
-        // Now you have the email and password, and you can use them as needed
-        console.log("Email:", email);
-        console.log("Password:", password);
+        // Now you have the email and password, and you can use them as needed:
+        //console.log("Email:", email);
+        //console.log("Password:", password);
         const query = `SELECT * FROM USER WHERE email = '${email}' AND password1 = '${password}'`;
         db.query(query, (error, results) => {
             names = results;
@@ -74,11 +80,13 @@ app.post("/api/v1/user/registered/", (req, res) => {
     }
 });
 
+//---------------------------------------------------------------------------------------------------------------------------
 app.listen(8081, () => {
     console.log("listening");
 });
 
-
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for getting available flights:
 app.post("/api/getflights", (req, res) => {
     try {
         const departure = req.body.departure;
@@ -127,3 +135,44 @@ app.post("/api/getflights", (req, res) => {
     });
 });
 
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for admin request to return all passengers on a flight by providing a flightID:
+app.post("/api/v1/user/getPassengerList/", (req, res) => {
+    try {
+
+        // Grab flightID from body of request:
+        console.log(req.body);
+        const flightID = req.body.flightID;
+        console.log("FlightID:", flightID);
+
+        // Define SQL query:
+        const query = `SELECT seat, firstName, lastName FROM BOOKING WHERE flightID = ?`;
+
+        // Run SQL query with provided flightID: 
+        db.query(query, [flightID], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'There were no returned passengers for that flightID', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "A list of passengers for the specified flight has been returned successfully",
+                        data: results,
+                    });
+
+            }
+        });
+    
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
