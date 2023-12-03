@@ -8,17 +8,19 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 const Home = () => {
     const [startDate, setStartDate] = useState(new Date("2023/12/08"));
     const [endDate, setEndDate] = useState(new Date("2023/12/10"));
-    const [departure, setdeparture] = useState();
-    const [arrival, setarrival] = useState();
+    const [departure, setdeparture] = useState("YYC");
+    const [arrival, setarrival] = useState("YYC");
     const navigate = useNavigate();
     const handleSubmit = (e) => {
-
+        if (departure === arrival) {
+            window.alert("Departure and arrival cities cannot be the same");
+            return;
+        }
         e.preventDefault();
         console.log("Form submitted");
-        navigate('/selectFlights', { dep: departure });
+        navigate('/selectFlights', { state: { dep: departure, arr: arrival, start: startDate } });
+    };
 
-
-    }
 
 
     return <h1>
@@ -33,6 +35,8 @@ const Home = () => {
                     selected={startDate}
                     onChange={(startDate) => setStartDate(startDate)}
                     mindate={"2023/12/15"}
+                    dateFormat="yyyy/MM/dd"
+                    showTimeSelect={false}
                 />
                 <div>
                     <select
@@ -54,6 +58,8 @@ const Home = () => {
                     startDate={startDate}
                     endDate={endDate}
                     minDate={startDate}
+                    showTimeSelect={false}
+                    dateFormat="yyyy/MM/dd"
                 />
                 <div>
                     <select

@@ -21,7 +21,7 @@ export default function App() {
           <Route path="User" element={<User />} />
           <Route path="Admin" element={<Admin />} />
           <Route path="AdminPage" element={<Adminpage />} />
-          <Route path="SelectFlights" element={<SelectFlights />} />
+          <Route path="selectFlights" element={<SelectFlights />} />
         </Route>
       </Routes>
     </BrowserRouter>
