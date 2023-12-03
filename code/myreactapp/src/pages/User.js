@@ -17,6 +17,8 @@ const User = () => {
         }
     }
     const login = async () => {
+        console.log(email)
+        console.log(password)
         let reponse = fetch("http://localhost:8081/api/v1/user/registered/", {
             method: "POST",
             body: JSON.stringify(email, password)

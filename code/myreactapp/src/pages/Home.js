@@ -4,9 +4,23 @@ import RegionPicker from "../components/RegionPicker";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './../styles.css';
+import { createSearchParams, useNavigate } from "react-router-dom";
 const Home = () => {
     const [startDate, setStartDate] = useState(new Date("2023/12/08"));
     const [endDate, setEndDate] = useState(new Date("2023/12/10"));
+    const [departure, setdeparture] = useState();
+    const [arrival, setarrival] = useState();
+    const navigate = useNavigate();
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+        console.log("Form submitted");
+        navigate('/selectFlights', { dep: departure });
+
+
+    }
+
+
     return <h1>
         <div>
             <div className="browsing">
@@ -21,7 +35,11 @@ const Home = () => {
                     mindate={"2023/12/15"}
                 />
                 <div>
-                    <select>
+                    <select
+                        onChange={(e) => {
+                            setdeparture(e.target.value);
+                            console.log(e.target.value);
+                        }}>
                         <option value="YYC">Calgary</option>
                         <option value="YEG">Edmonton</option>
                         <option value="YVR">Vancouver</option>
@@ -38,7 +56,11 @@ const Home = () => {
                     minDate={startDate}
                 />
                 <div>
-                    <select>
+                    <select
+                        onChange={(e) => {
+                            setarrival(e.target.value);
+                            console.log(e.target.value);
+                        }}>
                         <option value="YYC">Calgary</option>
                         <option value="YEG">Edmonton</option>
                         <option value="YVR">Vancouver</option>
@@ -46,11 +68,13 @@ const Home = () => {
                     </select>
                 </div>
             </div>
-            <h2 className="DateTitle">Number of passengers</h2>
-            <Form />
-        </div>
 
-    </h1>;
+        </div>
+        <form onSubmit={handleSubmit}>
+            <button type='submit'>Click to submit</button>
+        </form>
+
+    </h1 >;
 };
 
 export default Home;
