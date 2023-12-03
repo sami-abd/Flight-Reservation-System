@@ -326,3 +326,49 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for updating the promotions boolean in the REGISTERED_USER table (client provides 'userID' and a 'toggle' to turn promotions on or off [0/1]):
+app.post("/api/v1/user/updatePromotion/", (req, res) => {
+    try {
+
+        // Grab values from body of json request:
+       //console.log(req.body);
+        const userID = req.body.userID;
+        const toggle = req.body.toggle;
+
+        // Print values to console (for debugging):
+        console.log("userID:", userID);
+        console.log("toggle:", toggle);
+
+        // Define SQL query:
+        const query = 'UPDATE REGISTERED_USER SET promotionAlert = ? WHERE userID = ?';
+
+        // Run SQL query with provided value: 
+        db.query(query, [toggle, userID], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'Promotion was not upated successfully', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "Promotion was updated successfully",
+                        data: results,
+                    });
+            }
+        });
+    
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
