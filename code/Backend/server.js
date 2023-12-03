@@ -71,9 +71,7 @@ app.post("/api/v1/user/registered/", (req, res) => {
             }
         });
 
-        // Add your logic for user registration or authentication here
-
-        //res.status(200).json({ success: true, message: 'User registered successfully', name: names });
+    // Catch errors with a response message:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -99,22 +97,29 @@ app.post("/api/getflights", (req, res) => {
                        WHERE departure = ? AND destination = ? AND date = ?`;
 
         db.query(query, [departure, arrival, start], (error, results) => {
+            
+            // Handle errors:
             if (error) {
                 console.error(error);
                 return res.status(500).json({ success: false, message: "Internal Server Error" });
             }
 
+            // Handle no returned values:
             if (!results || results.length === 0) {
                 return res.status(404).json({ success: false, message: "No flights found" });
             }
 
-            console.log(results);
+            //console.log(results);
+
+            // Handle for when 1 or more results are returned:
             res.status(200).json({
                 success: true,
                 message: "Flights retrieved successfully",
                 data: results,
             });
         });
+
+    // Handle server errors:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -136,13 +141,15 @@ app.post("/api/getflights", (req, res) => {
 });
 
 //---------------------------------------------------------------------------------------------------------------------------
-// API SQL route for admin request to return all passengers on a flight by providing a flightID:
+// API SQL route for admin request to return all passengers on a flight (client provides a 'flightID'):
 app.post("/api/v1/user/getPassengerList/", (req, res) => {
     try {
 
         // Grab flightID from body of request:
-        console.log(req.body);
+       // console.log(req.body);
         const flightID = req.body.flightID;
+
+        // Print values to console (for debugging):
         console.log("FlightID:", flightID);
 
         // Define SQL query:
@@ -166,7 +173,55 @@ app.post("/api/v1/user/getPassengerList/", (req, res) => {
                         message: "A list of passengers for the specified flight has been returned successfully",
                         data: results,
                     });
+            }
+        });
+    
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
 
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for admin request to add a new flight into the system (client provides 'departure', 'destination', 'date', 'aircraftID'):
+app.post("/api/v1/user/addFlight/", (req, res) => {
+    try {
+
+        // Grab values from body of json request:
+       //console.log(req.body);
+        const departure = req.body.departure;
+        const destination = req.body.destination;
+        const date = req.body.date;
+        const aircraftID = req.body.aircraftID;
+
+        // Print values to console (for debugging):
+        console.log("departure:", departure);
+        console.log("destination:", destination);
+        console.log("date:", date);
+        console.log("aircraftID:", aircraftID);
+
+        // Define SQL query:
+        const query = 'INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)';
+
+        // Run SQL query with provided flightID: 
+        db.query(query, [departure, destination, date, aircraftID], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'There were no returned passengers for that flightID', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "A new flight has been successfully added",
+                        data: results,
+                    });
             }
         });
     
