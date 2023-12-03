@@ -1,6 +1,9 @@
 /*
 Create entire FlightReservation Database
 */
+DROP DATABASE IF EXISTS companyensf608;
+CREATE DATABASE companyensf608; 
+USE companyensf608;
 
 CREATE TABLE COMPANY (
 	companyID INT AUTO_INCREMENT PRIMARY KEY,
