@@ -52,6 +52,8 @@ app.post("/api/v1/user/registered/", (req, res) => {
         //console.log("Email:", email);
         //console.log("Password:", password);
         const query = `SELECT * FROM USER WHERE email = '${email}' AND password1 = '${password}'`;
+
+        // Run SQL query with provided value:
         db.query(query, (error, results) => {
             names = results;
             // return res.json(results);
@@ -96,6 +98,7 @@ app.post("/api/getflights", (req, res) => {
         const query = `SELECT flightID, time, departure, destination FROM FLIGHT 
                        WHERE departure = ? AND destination = ? AND date = ?`;
 
+        // Run SQL query with provided value:
         db.query(query, [departure, arrival, start], (error, results) => {
             
             // Handle errors:
@@ -155,7 +158,7 @@ app.post("/api/v1/user/getPassengerList/", (req, res) => {
         // Define SQL query:
         const query = `SELECT seat, firstName, lastName FROM BOOKING WHERE flightID = ?`;
 
-        // Run SQL query with provided flightID: 
+        // Run SQL query with provided value: 
         db.query(query, [flightID], (error, results) => {
 
             // Handle for when no results are returned
@@ -202,9 +205,9 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
         console.log("aircraftID:", aircraftID);
 
         // Define SQL query:
-        const query = 'INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)';
+        const query = `INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)`;
 
-        // Run SQL query with provided flightID: 
+        // Run SQL query with provided values: 
         db.query(query, [departure, destination, date, aircraftID], (error, results) => {
 
             // Handle for when no results are returned
@@ -220,6 +223,98 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
                     .json({
                         success: true,
                         message: "A new flight has been successfully added",
+                        data: results,
+                    });
+            }
+        });
+    
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for a booking to be removed from the booking table (client provides 'bookingID'):
+app.post("/api/v1/user/removeBooking/", (req, res) => {
+    try {
+
+        // Grab values from body of json request:
+       //console.log(req.body);
+        const bookingID = req.body.bookingID;
+
+        // Print values to console (for debugging):
+        console.log("bookingID:", bookingID);
+
+        // Define SQL query:
+        const query = `DELETE FROM BOOKING WHERE bookingID = ?`;
+
+        // Run SQL query with provided value: 
+        db.query(query, [bookingID], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'The booking was NOT successfully removed for that bookingID', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "The booking has been successfully removed",
+                        data: results,
+                    });
+            }
+        });
+    
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for returning all flights that a user has booked that are linked to their account (client provides 'email'):
+app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
+    try {
+
+        // Grab values from body of json request:
+       //console.log(req.body);
+        const email = req.body.email;
+
+        // Print values to console (for debugging):
+        console.log("email:", email);
+
+        // Define SQL query:
+        const query = `SELECT B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
+                        FROM FLIGHT AS F
+                        JOIN BOOKING AS B ON F.flightID = B.flightID
+                        JOIN SEAT AS S ON B.flightID = S.flightID AND B.seatID = S.seatID
+                        WHERE B.email = ?`;
+
+        // Run SQL query with provided value: 
+        db.query(query, [email], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'No bookings are currently available for this registered email', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "The following bookings exist for the registered email that was provided",
                         data: results,
                     });
             }
