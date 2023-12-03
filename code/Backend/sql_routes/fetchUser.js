@@ -1,21 +1,21 @@
 // Returns a single match of an email if the specified email and password exist in the user table when specified in the fetchUser request:
 
 // SQL query function definition:
-function fetchUser(email, pass, callback) {
+function fetchUser(email, password, callback) {
     const query = 'SELECT email FROM USER WHERE email = ? AND password = ?';
-    connection.query(query, [email, pass], (error, results) => {
+    connection.query(query, [email, password], (error, results) => {
         callback(error, results);
     });
 }
 
 // Route handler linked to fetchUser function (this can be called by React fetch command):
-router.get('/fetchUser/:email/:pass', (req, res) => {
+app.get('/fetchUser/:email/:password', (req, res) => {
     
 	// Grab variables for SQL request from incoming HTTP request:
-	const { email, pass } = req.params;
+	const { email, password } = req.params;
 
 	// Run SQL script with values passed in through the HTTP request:
-    fetchUser(email, pass, (error, results) => {
+    fetchUser(email, password, (error, results) => {
 		
 		// Handle errors:
         if (error) {
