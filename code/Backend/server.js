@@ -10,9 +10,9 @@ app.use(cors())
 
 app.use(bodyParser.json());
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'ensf614',
-    password: 'root',
+    password: 'ensf614',
     database: 'companyensf608'
 });
 
@@ -36,21 +36,25 @@ app.get('/department', (req, res) => {
 })
 app.post('/api/v1/user/registered/', (req, res) => {
     try {
-        const { email, password } = req.body;
+        console.log(req.body);
+        const email = req.body.email;
+        const password = req.body.password;
+        //const { email, password } = req.body;
         let names = ""
 
         // Now you have the email and password, and you can use them as needed
         console.log('Email:', email);
         console.log('Password:', password);
-        const query = 'SELECT * FROM USER';
+        const query = `SELECT email FROM USER WHERE email = '${email}' AND password1 = '${password}'`;
         db.query(query, (error, results) => {
             names = results;
             // return res.json(results);
+            res.status(200).json({ success: true, message: 'User registered successfully', data: names });
         });
 
         // Add your logic for user registration or authentication here
 
-        res.status(200).json({ success: true, message: 'User registered successfully', name: names });
+        //res.status(200).json({ success: true, message: 'User registered successfully', name: names });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
