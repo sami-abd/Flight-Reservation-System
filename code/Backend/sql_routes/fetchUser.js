@@ -9,7 +9,7 @@ function fetchUser(email, password, callback) {
 }
 
 // Route handler linked to fetchUser function (this can be called by React fetch command):
-app.get('/fetchUser/:email/:password', (req, res) => {
+app.post('/fetchUser/:email/:password', (req, res) => {
     
 	// Grab variables for SQL request from incoming HTTP request:
 	const { email, password } = req.params;
