@@ -10,9 +10,9 @@ app.use(cors());
 
 app.use(bodyParser.json());
 const db = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "ensf614",
-  password: "ensf614",
+  host: "localhost",
+  user: "root",
+  password: "ISAM@isam",
   database: "companyensf608",
 });
 
@@ -240,22 +240,20 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
     const bookingID = req.body.bookingID;
 
     // Print values to console (for debugging):
-    console.log("bookingID:", bookingID);
+    console.log("bookingID in api removeBooking:", bookingID);
 
     // Define SQL query:
-    const query1 = `DELETE FROM BOOKING WHERE bookingID = ?`;
+    const query = `DELETE FROM BOOKING WHERE bookingID = ?`;
 
     // Run SQL query with provided value:
     db.query(query, [bookingID], (error, results) => {
       // Handle for when no results are returned
       if (error) {
-        res
-          .status(404)
-          .json({
-            message:
-              "The booking was NOT successfully removed for that bookingID",
-            data: "0",
-          });
+        res.status(404).json({
+          message:
+            "The booking was NOT successfully removed for that bookingID",
+          data: "0",
+        });
       }
 
       // Handle for when 1 or more results are returned:
@@ -330,7 +328,7 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
     // Grab values from body of json request:
     //console.log(req.body);
     const email = req.body.email;
-
+    console.log("Email in api:", email);
     // Define SQL query:
     const query = `SELECT B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
                         FROM FLIGHT AS F
@@ -341,6 +339,8 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
     // Run SQL query with provided value:
     db.query(query, [email], (error, results) => {
       // Handle for when no results are returned
+      console.log(error);
+      console.log(results);
       if (results == null || results == "") {
         res.status(404).json({
           message:
@@ -476,12 +476,10 @@ app.post("/api/v1/user/createUser/", (req, res) => {
 
     // Handle for when no results are returned
     if (results == null || results == "") {
-      res
-        .status(404)
-        .json({
-          message: "The user was NOT successfully added to the database",
-          data: "0",
-        });
+      res.status(404).json({
+        message: "The user was NOT successfully added to the database",
+        data: "0",
+      });
     }
 
     // Handle for when 1 or more results are returned:
@@ -519,12 +517,10 @@ app.post("/api/v1/user/removeFlight/", (req, res) => {
     db.query(query, [flightID], (error, results) => {
       // Handle for when no results are returned
       if (error) {
-        res
-          .status(404)
-          .json({
-            message: "The flight was NOT successfully removed",
-            data: "0",
-          });
+        res.status(404).json({
+          message: "The flight was NOT successfully removed",
+          data: "0",
+        });
       }
 
       // Handle for when 1 or more results are returned:
@@ -604,12 +600,10 @@ app.post("/api/v1/user/removeAircraft/", (req, res) => {
     db.query(query, [aircraftID], (error, results) => {
       // Handle for when no results are returned
       if (error) {
-        res
-          .status(404)
-          .json({
-            message: "The aircraft was NOT successfully removed",
-            data: "0",
-          });
+        res.status(404).json({
+          message: "The aircraft was NOT successfully removed",
+          data: "0",
+        });
       }
 
       // Handle for when 1 or more results are returned:
@@ -696,12 +690,10 @@ app.post("/api/v1/user/removeCrew/", (req, res) => {
     db.query(query, [flightAttendantID, flightID], (error, results) => {
       // Handle for when no results are returned
       if (error) {
-        res
-          .status(404)
-          .json({
-            message: "The crew member was NOT successfully removed",
-            data: "0",
-          });
+        res.status(404).json({
+          message: "The crew member was NOT successfully removed",
+          data: "0",
+        });
       }
 
       // Handle for when 1 or more results are returned:

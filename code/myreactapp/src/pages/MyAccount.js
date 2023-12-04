@@ -40,6 +40,7 @@ const MyAccount = () => {
 
   const cancelBooking = async (bookingID) => {
     try {
+      console.log("booking ID in MyAccount: ", bookingID);
       const response = await fetch(
         "http://localhost:8081/api/v1/user/removeBooking/",
         {
@@ -55,9 +56,10 @@ const MyAccount = () => {
         throw new Error("Failed to cancel booking");
       }
 
-      // Refresh bookings list after cancellation
-      const email = sessionStorage.getItem("email");
-      fetchBookingDetails(email);
+      // Optimistically remove the booking from the state
+      setBookings(
+        bookings.filter((booking) => booking.bookingID !== bookingID)
+      );
     } catch (error) {
       console.error("Error canceling booking:", error);
     }
