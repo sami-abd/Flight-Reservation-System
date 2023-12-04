@@ -51,7 +51,7 @@ app.post("/api/v1/user/registered/", (req, res) => {
         // Now you have the email and password, and you can use them as needed:
         //console.log("Email:", email);
         //console.log("Password:", password);
-        const query = `SELECT * FROM USER WHERE email = '${email}' AND password1 = '${password}'`;
+        const query = `SELECT * FROM USER WHERE email = '${email}' AND password = '${password}'`;
 
         // Run SQL query with provided value:
         db.query(query, (error, results) => {
@@ -289,6 +289,7 @@ app.post("/api/v1/user/addBooking/", (req, res) => {
         //-------------------------------------------------------
         // Define SQL query #1: (add booking row)
         const query1 = `INSERT INTO BOOKING (flightID, firstName, lastName, email, seatID, hasInsurance) VALUES (?, ?, ?, ?, ?, ?)`;
+        const query = `SELECT * FROM USER WHERE email = '${email}' AND password = '${password}'`;
 
         // Run SQL query with provided value: 
         db.query(query1, [flightID, firstName, lastName, email, seatID, hasInsurance], (error, results) => {
@@ -549,3 +550,59 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
+
+
+//Remove flight
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for a flight to be removed from the flight table (client provides 'flightID'):
+app.post("/api/v1/user/removeFlight/", (req, res) => {
+    try {
+
+        // Grab values from body of json request:
+       //console.log(req.body);
+        const flightID = req.body.flightID;
+
+        // Print values to console (for debugging):
+        console.log("flightID:", flightID);
+
+        //-------------------------------------------------------
+        // Define SQL query #2: (delete booking row)
+        const query2 = `DELETE FROM FLIGHT WHERE flightID = ?`;
+
+        // Run SQL query with provided value: 
+        db.query(query2, [flightID], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'The booking was NOT successfully removed for that bookingID', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "The booking has been successfully removed",
+                        data: results,
+                    });
+            }
+        });
+    
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
+
+//Add aircraft
+
+//Remove aircraft
+
+//Add crew
+
+//Remove crew
+
+//Update 
