@@ -198,27 +198,28 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
         const query = `INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)`;
 
         // Run SQL query with provided values:
-        db.query(query, [departure, destination, date, aircraftID], (error, results) => {
-            // Handle for when no results are returned
-            if (results == null || results == "") {
-                res.status(404).json({
-                    message: "There were no returned passengers for that flightID",
-                    data: "0",
-                });
-            }
-
-            // Handle for when 1 or more results are returned:
-            else {
-                console.log(results)
-                res
-                    .status(200)
-                    .json({
-                        success: true,
-                        message: "A new flight has been successfully added",
-                        data: results,
+        db.query(query, [departure, destination, date, aircraftID],
+            (error, results) => {
+                // Handle for when no results are returned
+                if (results == null || results == "") {
+                    res.status(404).json({
+                        message: "There were no returned passengers for that flightID",
+                        data: "0",
                     });
-            }
-        });
+                }
+
+                // Handle for when 1 or more results are returned:
+                else {
+                    console.log(results)
+                    res
+                        .status(200)
+                        .json({
+                            success: true,
+                            message: "A new flight has been successfully added",
+                            data: results,
+                        });
+                }
+            });
 
         // Catch errors with a response message:
     } catch (error) {
