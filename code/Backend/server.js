@@ -17,62 +17,56 @@ const db = mysql.createConnection({
 });
 
 db.connect((err) => {
-    if (err) {
-        console.error("Error connecting to MySQL:", err);
-        return;
-    }
-    console.log("Connected to MySQL");
+  if (err) {
+    console.error("Error connecting to MySQL:", err);
+    return;
+  }
+  console.log("Connected to MySQL");
 });
 app.get("/", (re, res) => {
-    return res.json("From Backend Side");
+  return res.json("From Backend Side");
 });
 
-
-
 //---------------------------------------------------------------------------------------------------------------------------
-// 
+//
 app.get("/department", (req, res) => {
-    const sql = "SELECT *  FROM department";
-    db.query(sql, (err, data) => {
-        if (err) return res.json(err);
-        return res.json(data);
-    });
+  const sql = "SELECT *  FROM department";
+  db.query(sql, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
 });
 
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for login request:
 app.post("/api/v1/user/registered/", (req, res) => {
-    try {
-        console.log(req.body);
-        const email = req.body.email;
-        const password = req.body.password;
-        let names = "";
+  try {
+    console.log(req.body);
+    const email = req.body.email;
+    const password = req.body.password;
+    let names = "";
 
-        // Now you have the email and password, and you can use them as needed:
-        //console.log("Email:", email);
-        //console.log("Password:", password);
-        const query = `SELECT * FROM USER WHERE email = '${email}' AND password1 = '${password}'`;
+    // Now you have the email and password, and you can use them as needed:
+    //console.log("Email:", email);
+    //console.log("Password:", password);
+    const query = `SELECT * FROM USER WHERE email = '${email}' AND password = '${password}'`;
 
-        // Run SQL query with provided value:
-        db.query(query, (error, results) => {
-            names = results;
-            console.log(names)
-            // return res.json(results);
-            if (names == null || names == "") {
-                res.status(404).json({ data: '0' })
-            }
-            else {
-                console.log(names)
-                res
-                    .status(200)
-                    .json({
-                        success: true,
-                        message: "User registered successfully",
-                        data: names,
-                    });
-
-            }
+    // Run SQL query with provided value:
+    db.query(query, (error, results) => {
+      names = results;
+      console.log(names);
+      // return res.json(results);
+      if (names == null || names == "") {
+        res.status(404).json({ data: "0" });
+      } else {
+        console.log(names);
+        res.status(200).json({
+          success: true,
+          message: "User registered successfully",
+          data: names,
         });
+      }
+    });
 
         // Catch errors with a response message:
     } catch (error) {
@@ -83,20 +77,19 @@ app.post("/api/v1/user/registered/", (req, res) => {
 
 //---------------------------------------------------------------------------------------------------------------------------
 app.listen(8081, () => {
-    console.log("listening");
+  console.log("listening");
 });
 
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for getting available flights:
 app.post("/api/getflights", (req, res) => {
-    try {
-        const departure = req.body.departure;
-        const arrival = req.body.arrival;
-        const start = req.body.formattedStartDate;
+  try {
+    const departure = req.body.departure;
+    const arrival = req.body.arrival;
+    const start = req.body.formattedStartDate;
 
-
-        // Ensure that the date format in the SQL query matches the format in your database
-        const query = `SELECT flightID, time, departure, destination FROM FLIGHT 
+    // Ensure that the date format in the SQL query matches the format in your database
+    const query = `SELECT flightID, time, departure, destination FROM FLIGHT 
                        WHERE departure = ? AND destination = ? AND date = ?`;
 
         // Run SQL query with provided value:
@@ -108,27 +101,29 @@ app.post("/api/getflights", (req, res) => {
                 return res.status(500).json({ success: false, message: "Internal Server Error" });
             }
 
-            // Handle no returned values:
-            if (!results || results.length === 0) {
-                return res.status(404).json({ success: false, message: "No flights found" });
-            }
+      // Handle no returned values:
+      if (!results || results.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "No flights found" });
+      }
 
-            //console.log(results);
+      //console.log(results);
 
-            // Handle for when 1 or more results are returned:
-            res.status(200).json({
-                success: true,
-                message: "Flights retrieved successfully",
-                data: results,
-            });
-        });
+      // Handle for when 1 or more results are returned:
+      res.status(200).json({
+        success: true,
+        message: "Flights retrieved successfully",
+        data: results,
+      });
+    });
 
         // Handle server errors:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-
+  });
 });
 app.post('/api/getseats', (req, res) => {
     const query = 'SELECT * FROM seat WHERE flightID = ?';
@@ -152,14 +147,17 @@ app.post('/api//bookings', (req, res) => {
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for admin request to return all passengers on a flight (client provides a 'flightID'):
 app.post("/api/v1/user/getPassengerList/", (req, res) => {
-    try {
+  try {
+    // Grab flightID from body of request:
+    // console.log(req.body);
+    const flightID = req.body.flightID;
 
         // Grab flightID from body of request:
         // console.log(req.body);
         const flightID = req.body.flightID;
 
-        // Print values to console (for debugging):
-        console.log("FlightID:", flightID);
+    // Define SQL query:
+    const query = `SELECT seat, firstName, lastName FROM BOOKING WHERE flightID = ?`;
 
         // Define SQL query:
         const query = `SELECT seat, firstName, lastName FROM BOOKING WHERE flightID = ?`;
@@ -195,7 +193,13 @@ app.post("/api/v1/user/getPassengerList/", (req, res) => {
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for admin request to add a new flight into the system (client provides 'departure', 'destination', 'date', 'aircraftID'):
 app.post("/api/v1/user/addFlight/", (req, res) => {
-    try {
+  try {
+    // Grab values from body of json request:
+    //console.log(req.body);
+    const departure = req.body.departure;
+    const destination = req.body.destination;
+    const date = req.body.date;
+    const aircraftID = req.body.aircraftID;
 
         // Grab values from body of json request:
         //console.log(req.body);
@@ -204,14 +208,21 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
         const date = req.body.date;
         const aircraftID = req.body.aircraftID;
 
-        // Print values to console (for debugging):
-        console.log("departure:", departure);
-        console.log("destination:", destination);
-        console.log("date:", date);
-        console.log("aircraftID:", aircraftID);
+    // Define SQL query:
+    const query = `INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)`;
 
-        // Define SQL query:
-        const query = `INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)`;
+    // Run SQL query with provided values:
+    db.query(
+      query,
+      [departure, destination, date, aircraftID],
+      (error, results) => {
+        // Handle for when no results are returned
+        if (results == null || results == "") {
+          res.status(404).json({
+            message: "There were no returned passengers for that flightID",
+            data: "0",
+          });
+        }
 
         // Run SQL query with provided values:
         db.query(query, [departure, destination, date, aircraftID], (error, results) => {
@@ -241,11 +252,13 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
     }
 });
 
-
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for a booking to be removed from the booking table (client provides 'bookingID'):
 app.post("/api/v1/user/removeBooking/", (req, res) => {
-    try {
+  try {
+    // Grab values from body of json request:
+    //console.log(req.body);
+    const bookingID = req.body.bookingID;
 
         // Grab values from body of json request:
         //console.log(req.body);
@@ -290,11 +303,36 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
     }
 });
 
+      // Handle for when 1 or more results are returned:
+      else {
+        console.log(results);
+        res.status(200).json({
+          success: true,
+          message: "The booking has been successfully removed",
+          data: results,
+        });
+      }
+    });
+
+    // Catch errors with a response message:
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
 
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for a booking to be added from the booking table (client provides 'flightID', 'firstName', 'lastName', 'email', 'seatID', 'hasInsurance'):
 app.post("/api/v1/user/addBooking/", (req, res) => {
-    try {
+  try {
+    // Grab values from body of json request:
+    //console.log(req.body);
+    const flightID = req.body.flightID;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const email = req.body.email;
+    const seatID = req.body.seatID;
+    const hasInsurance = req.body.hasInsurance;
 
         // Grab values from body of json request:
         //console.log(req.body);
@@ -305,38 +343,47 @@ app.post("/api/v1/user/addBooking/", (req, res) => {
         const seatID = req.body.seatID;
         const hasInsurance = req.body.hasInsurance;
 
-        // Print values to console (for debugging):
-        console.log("flightID:", flightID);
-        console.log("firstName:", firstName);
-        console.log("lastName:", lastName);
-        console.log("email:", email);
-        console.log("seatID:", seatID);
-        console.log("hasInsurance:", hasInsurance);
+    //-------------------------------------------------------
+    // Define SQL query #1: (add booking row)
+    const query1 = `INSERT INTO BOOKING (flightID, firstName, lastName, email, seatID, hasInsurance) VALUES (?, ?, ?, ?, ?, ?)`;
 
         //-------------------------------------------------------
         // Define SQL query #1: (add booking row)
         const query1 = `INSERT INTO BOOKING (flightID, firstName, lastName, email, seatID, hasInsurance) VALUES ('?', '?', '?',' ?',' ?', '?')`;
+    // Run SQL query with provided value:
+    db.query(
+      query1,
+      [flightID, firstName, lastName, email, seatID, hasInsurance],
+      (error, results) => {
+        // Handle for when no results are returned
+        if (results == null || results == "") {
+          res.status(404).json({
+            message: "The booking was NOT successfully added",
+            data: "0",
+          });
+        }
 
-        // Run SQL query with provided value: 
-        db.query(query1, [flightID, firstName, lastName, email, seatID, hasInsurance], (error, results) => {
+        // Handle for when 1 or more results are returned:
+        else {
+          console.log(results);
+          res.status(200).json({
+            success: true,
+            message: "The booking has been successfully added",
+            data: results,
+          });
+        }
+      }
+    );
 
-            // Handle for when no results are returned
-            if (results == null || results == "") {
-                res.status(404).json({ message: 'The booking was NOT successfully added', data: '0' })
-            }
+    //-------------------------------------------------------
+    // Define SQL query #2: (update seat to empty) --> Do this before query #2
+    // const query2 = `UPDATE SEAT AS S
+    //               JOIN BOOKING AS B ON S.flightID = B.flightID AND S.seatID = B.seatID
+    //             SET S.isAvailable = 1
+    //           WHERE B.bookingID = ?`;
 
-            // Handle for when 1 or more results are returned:
-            else {
-                console.log(results)
-                res
-                    .status(200)
-                    .json({
-                        success: true,
-                        message: "The booking has been successfully added",
-                        data: results,
-                    });
-            }
-        });
+    // Run SQL query with provided value:
+    // db.query(query2, [bookingID], (error, results) => {
 
         // Define SQL query #2: (update seat to empty) --> Do this before query #2
         // const query2 = `UPDATE SEAT AS S
@@ -372,21 +419,20 @@ app.post("/api/v1/user/addBooking/", (req, res) => {
     }
 });
 
-
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for returning all flights that a user has booked that are linked to their account (client provides 'email'):
 app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
-    try {
+  try {
+    // Grab values from body of json request:
+    //console.log(req.body);
+    const email = req.body.email;
 
         // Grab values from body of json request:
         //console.log(req.body);
         const email = req.body.email;
 
-        // Print values to console (for debugging):
-        console.log("email:", email);
-
-        // Define SQL query:
-        const query = `SELECT B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
+    // Define SQL query:
+    const query = `SELECT B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
                         FROM FLIGHT AS F
                         JOIN BOOKING AS B ON F.flightID = B.flightID
                         JOIN SEAT AS S ON B.flightID = S.flightID AND B.seatID = S.seatID
@@ -420,20 +466,42 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
     }
 });
 
+      // Handle for when 1 or more results are returned:
+      else {
+        console.log(results);
+        res.status(200).json({
+          success: true,
+          message:
+            "The following bookings exist for the registered email that was provided",
+          data: results,
+        });
+      }
+    });
+
+    // Catch errors with a response message:
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
 
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for updating the promotions boolean in the REGISTERED_USER table (client provides 'userID' and a 'toggle' to turn promotions on or off [0/1]):
 app.post("/api/v1/user/updatePromotion/", (req, res) => {
-    try {
+  try {
+    // Grab values from body of json request:
+    //console.log(req.body);
+    const userID = req.body.userID;
+    const toggle = req.body.toggle;
 
         // Grab values from body of json request:
         //console.log(req.body);
         const userID = req.body.userID;
         const toggle = req.body.toggle;
 
-        // Print values to console (for debugging):
-        console.log("userID:", userID);
-        console.log("toggle:", toggle);
+    // Define SQL query:
+    const query =
+      "UPDATE REGISTERED_USER SET promotionAlert = ? WHERE userID = ?";
 
         // Define SQL query:
         const query = 'UPDATE REGISTERED_USER SET promotionAlert = ? WHERE userID = ?';

@@ -55,15 +55,16 @@ export const Header = () => {
       </div>
       <div className="header_logo">
         <Link to="/">
-          {" "}
-          {/* This replaces the <a> tag */}
           <img src={crownLogo} className="logo" alt="crown logo" />
         </Link>
       </div>
       <div className="header_login">
         <button onClick={() => navigate("/")}>Home</button>
         {isLoggedIn ? (
-          <button onClick={() => handleLogout()}>Logout</button>
+          <>
+            <button onClick={() => handleLogout()}>Logout</button>
+            <button onClick={() => navigate("/MyAccount")}>MyAccount</button>
+          </>
         ) : (
           <div>
             <button onClick={() => navigate("/User")}>Login</button>
@@ -71,7 +72,6 @@ export const Header = () => {
               Registration
             </button>
             <button onClick={() => navigate("/AdminPage")}>Admin</button>
-            <button onClick={() => navigate("/Payment")}>Payment</button>
           </div>
         )}
       </div>
