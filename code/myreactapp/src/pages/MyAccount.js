@@ -6,6 +6,9 @@ import "./MyAccount.css"; // Import your CSS file here
 const MyAccount = () => {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
+  const [isSubscribed, setIsSubscribed] = useState(false); // New state to track subscription status
+  const [message, setMessage] = useState(""); // New state for displaying messages
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const email = sessionStorage.getItem("email");
@@ -38,16 +41,18 @@ const MyAccount = () => {
     }
   };
 
-  const cancelBooking = async (bookingID) => {
+  const cancelBooking = async (booking) => {
     try {
+      const { firstName, lastName, flightID } = booking;
+      console.log(booking);
       const response = await fetch(
-        "http://localhost:8081/api/v1/user/removeBooking/",
+        "http://localhost:8081/api/v1/user/removeBooking2/",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ bookingID }),
+          body: JSON.stringify({ firstName, lastName, flightID }),
         }
       );
 
@@ -55,17 +60,33 @@ const MyAccount = () => {
         throw new Error("Failed to cancel booking");
       }
 
-      // Refresh bookings list after cancellation
-      const email = sessionStorage.getItem("email");
-      fetchBookingDetails(email);
+      // Optimistically remove the booking from the state
+      setBookings(
+        bookings.filter(
+          (b) =>
+            b.flightID !== flightID ||
+            b.firstName !== firstName ||
+            b.lastName !== lastName
+        )
+      );
     } catch (error) {
       console.error("Error canceling booking:", error);
+      // Optionally, revert the state update or show an error message
     }
   };
 
-  const subscribeToPromotions = async () => {
-    // Replace this with your actual API call logic
-    console.log("Subscribed to promotions");
+  const toggleSubscription = () => {
+    const newSubscriptionStatus = !isSubscribed;
+    setIsSubscribed(newSubscriptionStatus);
+
+    // Update the message and control the popup
+    if (newSubscriptionStatus) {
+      setMessage("You are subscribed");
+      setShowPopup(true); // Show the popup when subscribed
+    } else {
+      setMessage("You are not subscribed");
+      setShowPopup(false); // Hide the popup when not subscribed
+    }
   };
 
   return (
@@ -89,7 +110,7 @@ const MyAccount = () => {
               }
               return null;
             })}
-            <button onClick={() => cancelBooking(booking.bookingID)}>
+            <button onClick={() => cancelBooking(booking)}>
               Cancel Booking
             </button>
           </div>
@@ -97,8 +118,10 @@ const MyAccount = () => {
       ) : (
         <p>No bookings found.</p>
       )}
-
-      <button onClick={subscribeToPromotions}>Subscribe to Promotions</button>
+      <button onClick={toggleSubscription}>
+        {isSubscribed ? "You are subscribed" : "You are not subscribed"}
+        {showPopup && <div className="popup">You have 20% off hotels</div>}
+      </button>
     </div>
   );
 };

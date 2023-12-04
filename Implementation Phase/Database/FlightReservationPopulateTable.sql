@@ -2,6 +2,10 @@
 Populate database with sample records
 */
 use companyensf608;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 208386df00cb5516fd13c1acc50d4a0c8789549f
 INSERT INTO COMPANY (name)
 VALUES
 	("WestJet"),
@@ -367,6 +371,8 @@ INSERT INTO BOOKING (
         hasInsurance
 )	
 VALUES 
+	( 3, 'Emily', 'Thompson','emily.thompson@example.com', 120, 1),
+    ( 1, 'Emily', 'Thompson','emily.thompson@example.com', 100, 1),
 	(3, "Emily", "Johnson", "emily.johnson@example.com", 42, 1),
 	(12, "Jacob", "Miller", "jacob.miller@example.com", 15, 0),
 	(7, "Olivia", "Smith", "olivia.smith@example.com", 78, 1),

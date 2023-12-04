@@ -17,5 +17,16 @@
 .booking-info p {
   margin: 5px 0;
 }
+.popup {
+  position: absolute;
+  left: 100%; /* Adjust as needed */
+  top: 0; /* Adjust as needed */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
 
 /* Add more styles as needed */

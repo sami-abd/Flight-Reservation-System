@@ -240,22 +240,20 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
         const bookingID = req.body.bookingID;
 
         // Print values to console (for debugging):
-        console.log("bookingID:", bookingID);
+        console.log("bookingID in api removeBooking:", bookingID);
 
         // Define SQL query:
-        const query1 = `DELETE FROM BOOKING WHERE bookingID = ?`;
+        const query = `DELETE FROM BOOKING WHERE bookingID = ?`;
 
         // Run SQL query with provided value:
         db.query(query, [bookingID], (error, results) => {
             // Handle for when no results are returned
             if (error) {
-                res
-                    .status(404)
-                    .json({
-                        message:
-                            "The booking was NOT successfully removed for that bookingID",
-                        data: "0",
-                    });
+                res.status(404).json({
+                    message:
+                        "The booking was NOT successfully removed for that bookingID",
+                    data: "0",
+                });
             }
 
             // Handle for when 1 or more results are returned:
@@ -335,9 +333,9 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
         // Grab values from body of json request:
         //console.log(req.body);
         const email = req.body.email;
-
+        console.log("Email in api:", email);
         // Define SQL query:
-        const query = `SELECT B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
+        const query = `SELECT B.bookingID, B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
                         FROM FLIGHT AS F
                         JOIN BOOKING AS B ON F.flightID = B.flightID
                         JOIN SEAT AS S ON B.flightID = S.flightID AND B.seatID = S.seatID
@@ -346,6 +344,8 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
         // Run SQL query with provided value:
         db.query(query, [email], (error, results) => {
             // Handle for when no results are returned
+            console.log(error);
+            console.log(results);
             if (results == null || results == "") {
                 res.status(404).json({
                     message:
@@ -724,6 +724,54 @@ app.post("/api/v1/getAir", (req, res) => {
                     success: true,
                     message:
                         "The crew has been successfully assigned to the specified flight",
+                    data: results,
+                });
+            }
+        });
+
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
+// Write API with firstName, lastName, and flightID
+
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for a booking to be removed from the booking table (client provides 'firstName', 'lastName', 'flightID'):
+app.post("/api/v1/user/removeBooking2/", (req, res) => {
+    try {
+        // Grab values from body of json request:
+        //console.log(req.body);
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const flightID = req.body.flightID;
+
+        // Print values to console (for debugging):
+        console.log("firstName:", firstName);
+        console.log("lastName:", lastName);
+        console.log("flightID:", flightID);
+
+        // Define SQL query:
+        const query = `DELETE FROM BOOKING WHERE firstName = ? AND lastName = ? AND flightID = ?`;
+
+        // Run SQL query with provided value:
+        db.query(query, [firstName, lastName, flightID], (error, results) => {
+            // Handle for when no results are returned
+            if (error) {
+                res.status(404).json({
+                    message:
+                        "The booking was NOT successfully removed for that bookingID",
+                    data: "0",
+                });
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results);
+                res.status(200).json({
+                    success: true,
+                    message: "The booking has been successfully removed",
                     data: results,
                 });
             }
