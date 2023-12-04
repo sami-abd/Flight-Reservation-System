@@ -330,7 +330,7 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
     const email = req.body.email;
     console.log("Email in api:", email);
     // Define SQL query:
-    const query = `SELECT B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
+    const query = `SELECT B.bookingID, B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
                         FROM FLIGHT AS F
                         JOIN BOOKING AS B ON F.flightID = B.flightID
                         JOIN SEAT AS S ON B.flightID = S.flightID AND B.seatID = S.seatID
@@ -738,13 +738,11 @@ app.post("/api/v1/user/removeBooking2/", (req, res) => {
     db.query(query, [firstName, lastName, flightID], (error, results) => {
       // Handle for when no results are returned
       if (error) {
-        res
-          .status(404)
-          .json({
-            message:
-              "The booking was NOT successfully removed for that bookingID",
-            data: "0",
-          });
+        res.status(404).json({
+          message:
+            "The booking was NOT successfully removed for that bookingID",
+          data: "0",
+        });
       }
 
       // Handle for when 1 or more results are returned:
