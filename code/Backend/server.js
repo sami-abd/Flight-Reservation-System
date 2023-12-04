@@ -286,15 +286,16 @@ app.post("/api/v1/user/addBooking/", (req, res) => {
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
         const email = req.body.email;
-        const seatID = req.body.seatID;
+        const seatID = req.body.seat;
         const hasInsurance = req.body.hasInsurance;
 
 
 
         //-------------------------------------------------------
         // Define SQL query #1: (add booking row)
-        const query1 = `INSERT INTO BOOKING (flightID, firstName, lastName, email, seatID, hasInsurance) VALUES ('?', '?', '?',' ?',' ?', '?')`;
+        const query1 = `INSERT INTO BOOKING (flightID, firstName, lastName, email, seatID, hasInsurance) VALUES (?, ?, ?, ?, ?, ?)`;
         // Run SQL query with provided value:
+        console.log(email)
         db.query(
             query1,
             [flightID, firstName, lastName, email, seatID, hasInsurance],
@@ -459,7 +460,7 @@ app.post("/api/v1/user/createUser/", (req, res) => {
         //console.log(req.body);
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
-        const birthdate = req.body.birthdate;
+        const birthdate = req.body.FdateOfBirth;
         const email = req.body.email;
         const street = req.body.street;
         const city = req.body.city;
@@ -478,13 +479,14 @@ app.post("/api/v1/user/createUser/", (req, res) => {
         console.log("password:", password);
         console.log("userType:", userType);
         // Define SQL query:
-        const query = "INSERT INTO USER (firstName, lastName, birthdate, email, street, city, province, password, userType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        const query = "INSERT INTO USER (firstName, lastName, birthdate, email, street, city, province, password, userType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'REGISTERED_USER')";
 
         // Run SQL query with provided value: 
-        db.query(query, [firstName, lastName, birthdate, email, street, city, province, password, userType], (error, results) => {
+        db.query(query, [firstName, lastName, birthdate, email, street, city, province, password], (error, results) => {
 
             // Handle for when no results are returned
-            if (results == null || results == "") {
+            if (error) {
+                console.log(error)
                 res.status(404).json({ message: 'The user was NOT successfully added to the database', data: '0' })
             }
 
