@@ -1,8 +1,9 @@
 // SelectSeat.js
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './SelectSeat.css';
+
+
 
 const SelectSeat = () => {
     const location = useLocation();
@@ -82,39 +83,44 @@ const SelectSeat = () => {
 
 
     return (
-        <div className="container">
-            <h1>Select Seat</h1>
-            {error && <div className="error-message">{error}</div>}
-            {/* Input section for seat number */}
-            {/* Button section to go to the payment page */}
-            <div className="button-section">
-                <button onClick={goToPaymentPage}>Go to Payment Page</button>
-            </div>
-            {/* Table for displaying seat information */}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Seat ID</th>
-                        <th>Class</th>
-                        <th>Price</th>
-                        <th>Availability</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {seats.map((seat, index) => (
-                        <tr
-                            key={seat.id}
-                            onClick={() => handleRowClick(index)}
-                            className={selectedRow === index ? 'selected-row' : ''}
-                        >
-                            <td>{seat.seatID}</td>
-                            <td>{seat.class}</td>
-                            <td>{seat.price}</td>
-                            <td>{seat.isAvailable ? 'Available' : 'Not Available'}</td>
+        <div>
+
+
+
+            <div className="container">
+                <h1>Select Seat</h1>
+                {error && <div className="error-message">{error}</div>}
+                {/* Input section for seat number */}
+                {/* Button section to go to the payment page */}
+                <div className="button-section">
+                    <button onClick={goToPaymentPage}>Go to Payment Page</button>
+                </div>
+                {/* Table for displaying seat information */}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Seat ID</th>
+                            <th>Class</th>
+                            <th>Price</th>
+                            <th>Availability</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {seats.map((seat, index) => (
+                            <tr
+                                key={seat.id}
+                                onClick={() => handleRowClick(index)}
+                                className={selectedRow === index ? 'selected-row' : ''}
+                            >
+                                <td>{seat.seatID}</td>
+                                <td>{seat.class}</td>
+                                <td>{seat.price}</td>
+                                <td>{seat.isAvailable ? 'Available' : 'Not Available'}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

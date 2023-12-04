@@ -5,7 +5,7 @@ const PaymentConfirmation = () => {
   // Use React Router's useLocation hook to access the state passed from the Payment component
   const location = useLocation();
   const bookingInfo = location.state?.bookingInfo; // Ensure you pass this state from the Payment component
-
+  
   // If there's no booking information, you can redirect or display a message
   if (!bookingInfo) {
     return <div>No booking information available.</div>;

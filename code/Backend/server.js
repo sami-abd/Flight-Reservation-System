@@ -10,9 +10,9 @@ app.use(cors());
 
 app.use(bodyParser.json());
 const db = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "ensf614",
-    password: "ensf614",
+    password: "root",
     database: "companyensf608",
 });
 
@@ -74,7 +74,7 @@ app.post("/api/v1/user/registered/", (req, res) => {
             }
         });
 
-    // Catch errors with a response message:
+        // Catch errors with a response message:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -101,7 +101,7 @@ app.post("/api/getflights", (req, res) => {
 
         // Run SQL query with provided value:
         db.query(query, [departure, arrival, start], (error, results) => {
-            
+
             // Handle errors:
             if (error) {
                 console.error(error);
@@ -123,7 +123,7 @@ app.post("/api/getflights", (req, res) => {
             });
         });
 
-    // Handle server errors:
+        // Handle server errors:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -145,18 +145,17 @@ app.post('/api/getseats', (req, res) => {
     });
 });
 
-<<<<<<< HEAD
 app.post('/api//bookings', (req, res) => {
+
     res.status(200).json({ success: true, message: 'Seats retrieved successfully', data: results });
 });
-=======
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for admin request to return all passengers on a flight (client provides a 'flightID'):
 app.post("/api/v1/user/getPassengerList/", (req, res) => {
     try {
 
         // Grab flightID from body of request:
-       // console.log(req.body);
+        // console.log(req.body);
         const flightID = req.body.flightID;
 
         // Print values to console (for debugging):
@@ -165,7 +164,7 @@ app.post("/api/v1/user/getPassengerList/", (req, res) => {
         // Define SQL query:
         const query = `SELECT seat, firstName, lastName FROM BOOKING WHERE flightID = ?`;
 
-        // Run SQL query with provided value: 
+        // Run SQL query with provided value:
         db.query(query, [flightID], (error, results) => {
 
             // Handle for when no results are returned
@@ -185,8 +184,8 @@ app.post("/api/v1/user/getPassengerList/", (req, res) => {
                     });
             }
         });
-    
-    // Catch errors with a response message:
+
+        // Catch errors with a response message:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -199,7 +198,7 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
     try {
 
         // Grab values from body of json request:
-       //console.log(req.body);
+        //console.log(req.body);
         const departure = req.body.departure;
         const destination = req.body.destination;
         const date = req.body.date;
@@ -214,7 +213,7 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
         // Define SQL query:
         const query = `INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)`;
 
-        // Run SQL query with provided values: 
+        // Run SQL query with provided values:
         db.query(query, [departure, destination, date, aircraftID], (error, results) => {
 
             // Handle for when no results are returned
@@ -234,8 +233,8 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
                     });
             }
         });
-    
-    // Catch errors with a response message:
+
+        // Catch errors with a response message:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -249,7 +248,7 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
     try {
 
         // Grab values from body of json request:
-       //console.log(req.body);
+        //console.log(req.body);
         const bookingID = req.body.bookingID;
 
         // Print values to console (for debugging):
@@ -258,7 +257,7 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
         // Define SQL query:
         const query = `DELETE FROM BOOKING WHERE bookingID = ?`;
 
-        // Run SQL query with provided value: 
+        // Run SQL query with provided value:
         db.query(query, [bookingID], (error, results) => {
 
             // Handle for when no results are returned
@@ -278,8 +277,8 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
                     });
             }
         });
-    
-    // Catch errors with a response message:
+
+        // Catch errors with a response message:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -293,7 +292,7 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
     try {
 
         // Grab values from body of json request:
-       //console.log(req.body);
+        //console.log(req.body);
         const email = req.body.email;
 
         // Print values to console (for debugging):
@@ -306,7 +305,7 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
                         JOIN SEAT AS S ON B.flightID = S.flightID AND B.seatID = S.seatID
                         WHERE B.email = ?`;
 
-        // Run SQL query with provided value: 
+        // Run SQL query with provided value:
         db.query(query, [email], (error, results) => {
 
             // Handle for when no results are returned
@@ -326,8 +325,8 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
                     });
             }
         });
-    
-    // Catch errors with a response message:
+
+        // Catch errors with a response message:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -341,7 +340,7 @@ app.post("/api/v1/user/updatePromotion/", (req, res) => {
     try {
 
         // Grab values from body of json request:
-       //console.log(req.body);
+        //console.log(req.body);
         const userID = req.body.userID;
         const toggle = req.body.toggle;
 
@@ -352,7 +351,7 @@ app.post("/api/v1/user/updatePromotion/", (req, res) => {
         // Define SQL query:
         const query = 'UPDATE REGISTERED_USER SET promotionAlert = ? WHERE userID = ?';
 
-        // Run SQL query with provided value: 
+        // Run SQL query with provided value:
         db.query(query, [toggle, userID], (error, results) => {
 
             // Handle for when no results are returned
@@ -372,11 +371,10 @@ app.post("/api/v1/user/updatePromotion/", (req, res) => {
                     });
             }
         });
-    
-    // Catch errors with a response message:
+
+        // Catch errors with a response message:
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
->>>>>>> 8314bf215d4a60a2c6ea672f20f40e17f91bc95a

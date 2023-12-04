@@ -3,7 +3,7 @@ import Form from "../components/Form";
 import RegionPicker from "../components/RegionPicker";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './../styles.css';
+import '../styles.css';
 import { createSearchParams, useNavigate } from "react-router-dom";
 const Home = () => {
     const [startDate, setStartDate] = useState(new Date("2023/12/23"));
