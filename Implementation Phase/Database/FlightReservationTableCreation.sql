@@ -1,7 +1,9 @@
 /*
 Create entire FlightReservation Database
 */
-
+drop database if exists companyensf608;
+create database companyensf608;
+use companyensf608;
 CREATE TABLE COMPANY (
 	companyID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
@@ -12,7 +14,7 @@ CREATE TABLE AIRCRAFT (
     name VARCHAR(50) NOT NULL,
     capacity INT NOT NULL,
     companyID INT NOT NULL,
-    FOREIGN KEY (companyID) REFERENCES COMPANY(companyID)
+    FOREIGN KEY (companyID) REFERENCES COMPANY(companyID) ON DELETE CASCADE
 );
 
 CREATE TABLE AIRPORT (
@@ -157,7 +159,7 @@ CREATE TABLE FLIGHT_ATTENDANT_ASSIGNMENT (
 	flightAttendantID INT,
     FOREIGN KEY (flightAttendantID) REFERENCES FLIGHT_ATTENDANT(userID) ON DELETE CASCADE,
     flightID INT,
-    FOREIGN KEY (flightID) REFERENCES FLIGHT(flightID),
+    FOREIGN KEY (flightID) REFERENCES FLIGHT(flightID) ON DELETE CASCADE,
     PRIMARY KEY (flightAttendantID, flightID)
 );
 
@@ -220,5 +222,12 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+ALTER TABLE booking
+DROP FOREIGN KEY booking_ibfk_1;
+
+ALTER TABLE booking
+ADD CONSTRAINT booking_ibfk_1 
+FOREIGN KEY (flightID) REFERENCES flight(flightID) ON DELETE CASCADE;
 
 
