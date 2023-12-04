@@ -10,10 +10,10 @@ app.use(cors());
 
 app.use(bodyParser.json());
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "ISAM@isam",
-  database: "companyensf608",
+    host: "127.0.0.1",
+    user: "ensf614",
+    password: "root",
+    database: "companyensf608",
 });
 
 db.connect((err) => {
@@ -68,11 +68,11 @@ app.post("/api/v1/user/registered/", (req, res) => {
       }
     });
 
-    // Catch errors with a response message:
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
 });
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -92,15 +92,14 @@ app.post("/api/getflights", (req, res) => {
     const query = `SELECT flightID, time, departure, destination FROM FLIGHT 
                        WHERE departure = ? AND destination = ? AND date = ?`;
 
-    // Run SQL query with provided value:
-    db.query(query, [departure, arrival, start], (error, results) => {
-      // Handle errors:
-      if (error) {
-        console.error(error);
-        return res
-          .status(500)
-          .json({ success: false, message: "Internal Server Error" });
-      }
+        // Run SQL query with provided value:
+        db.query(query, [departure, arrival, start], (error, results) => {
+
+            // Handle errors:
+            if (error) {
+                console.error(error);
+                return res.status(500).json({ success: false, message: "Internal Server Error" });
+            }
 
       // Handle no returned values:
       if (!results || results.length === 0) {
@@ -119,33 +118,32 @@ app.post("/api/getflights", (req, res) => {
       });
     });
 
-    // Handle server errors:
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-});
-app.post("/api/getseats", (req, res) => {
-  const query = "SELECT * FROM seat WHERE flightID = ?";
-  const flightID = req.body.flightID;
-
-  db.query(query, [flightID], (error, results) => {
-    console.log(results);
-    if (error) {
-      console.error("Error executing MySQL query:", error);
-      res
-        .status(500)
-        .json({ success: false, message: "Internal Server Error" });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "Seats retrieved successfully",
-        data: results,
-      });
+        // Handle server errors:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
   });
 });
+app.post('/api/getseats', (req, res) => {
+    const query = 'SELECT * FROM seat WHERE flightID = ?';
+    const flightID = req.body.flightID;
 
+    db.query(query, [flightID], (error, results) => {
+        console.log(results)
+        if (error) {
+            console.error('Error executing MySQL query:', error);
+            res.status(500).json({ success: false, message: 'Internal Server Error' });
+        } else {
+            res.status(200).json({ success: true, message: 'Seats retrieved successfully', data: results });
+        }
+    });
+});
+
+app.post('/api//bookings', (req, res) => {
+
+    res.status(200).json({ success: true, message: 'Seats retrieved successfully', data: results });
+});
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for admin request to return all passengers on a flight (client provides a 'flightID'):
 app.post("/api/v1/user/getPassengerList/", (req, res) => {
@@ -154,39 +152,42 @@ app.post("/api/v1/user/getPassengerList/", (req, res) => {
     // console.log(req.body);
     const flightID = req.body.flightID;
 
-    // Print values to console (for debugging):
-    console.log("FlightID:", flightID);
+        // Grab flightID from body of request:
+        // console.log(req.body);
+        const flightID = req.body.flightID;
 
     // Define SQL query:
     const query = `SELECT seat, firstName, lastName FROM BOOKING WHERE flightID = ?`;
 
-    // Run SQL query with provided value:
-    db.query(query, [flightID], (error, results) => {
-      // Handle for when no results are returned
-      if (results == null || results == "") {
-        res.status(404).json({
-          message: "There were no returned passengers for that flightID",
-          data: "0",
-        });
-      }
+        // Define SQL query:
+        const query = `SELECT seat, firstName, lastName FROM BOOKING WHERE flightID = ?`;
 
-      // Handle for when 1 or more results are returned:
-      else {
-        console.log(results);
-        res.status(200).json({
-          success: true,
-          message:
-            "A list of passengers for the specified flight has been returned successfully",
-          data: results,
-        });
-      }
-    });
+        // Run SQL query with provided value:
+        db.query(query, [flightID], (error, results) => {
 
-    // Catch errors with a response message:
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'There were no returned passengers for that flightID', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "A list of passengers for the specified flight has been returned successfully",
+                        data: results,
+                    });
+            }
+        });
+
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
 });
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -200,11 +201,12 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
     const date = req.body.date;
     const aircraftID = req.body.aircraftID;
 
-    // Print values to console (for debugging):
-    console.log("departure:", departure);
-    console.log("destination:", destination);
-    console.log("date:", date);
-    console.log("aircraftID:", aircraftID);
+        // Grab values from body of json request:
+        //console.log(req.body);
+        const departure = req.body.departure;
+        const destination = req.body.destination;
+        const date = req.body.date;
+        const aircraftID = req.body.aircraftID;
 
     // Define SQL query:
     const query = `INSERT INTO FLIGHT (departure, destination, date, aircraftID) VALUES (?, ?, ?, ?)`;
@@ -222,23 +224,32 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
           });
         }
 
-        // Handle for when 1 or more results are returned:
-        else {
-          console.log(results);
-          res.status(200).json({
-            success: true,
-            message: "A new flight has been successfully added",
-            data: results,
-          });
-        }
-      }
-    );
+        // Run SQL query with provided values:
+        db.query(query, [departure, destination, date, aircraftID], (error, results) => {
 
-    // Catch errors with a response message:
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'There were no returned passengers for that flightID', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "A new flight has been successfully added",
+                        data: results,
+                    });
+            }
+        });
+
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
 });
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -249,8 +260,9 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
     //console.log(req.body);
     const bookingID = req.body.bookingID;
 
-    // Print values to console (for debugging):
-    console.log("bookingID:", bookingID);
+        // Grab values from body of json request:
+        //console.log(req.body);
+        const bookingID = req.body.bookingID;
 
     /*      //-------------------------------------------------------
         // Define SQL query #1: (update seat to empty) --> Do this before query #2
@@ -259,12 +271,12 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
                         SET S.isAvailable = 1
                         WHERE B.bookingID = ?`;
 
-        // Run SQL query with provided value: 
-        db.query(query1, [bookingID], (error, results) => {
+        // Run SQL query with provided value:
+        db.query(query, [bookingID], (error, results) => {
 
             // Handle for when no results are returned
             if (results == null || results == "") {
-                res.status(404).json({ message: 'The seat was NOT successfully removed using that bookingID', data: '0' })
+                res.status(404).json({ message: 'The booking was NOT successfully removed for that bookingID', data: '0' })
             }
 
             // Handle for when 1 or more results are returned:
@@ -274,26 +286,18 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
                     .status(200)
                     .json({
                         success: true,
-                        message: "The seat was successfully removed using that bookingID",
+                        message: "The booking has been successfully removed",
                         data: results,
-                    });      
+                    });
             }
-        }); */
-
-    //-------------------------------------------------------
-    // Define SQL query #2: (delete booking row)
-    const query2 = `DELETE FROM BOOKING WHERE bookingID = ?`;
-
-    // Run SQL query with provided value:
-    db.query(query2, [bookingID], (error, results) => {
-      // Handle for when no results are returned
-      if (results == null || results == "") {
-        res.status(404).json({
-          message:
-            "The booking was NOT successfully removed for that bookingID",
-          data: "0",
         });
-      }
+
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
 
       // Handle for when 1 or more results are returned:
       else {
@@ -406,8 +410,9 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
     //console.log(req.body);
     const email = req.body.email;
 
-    // Print values to console (for debugging):
-    console.log("email:", email);
+        // Grab values from body of json request:
+        //console.log(req.body);
+        const email = req.body.email;
 
     // Define SQL query:
     const query = `SELECT B.firstName, B.lastName, F.flightID, F.departure, F.destination, F.date, B.seatID, S.price
@@ -416,16 +421,33 @@ app.post("/api/v1/user/getPassengerFlight/", (req, res) => {
                         JOIN SEAT AS S ON B.flightID = S.flightID AND B.seatID = S.seatID
                         WHERE B.email = ?`;
 
-    // Run SQL query with provided value:
-    db.query(query, [email], (error, results) => {
-      // Handle for when no results are returned
-      if (results == null || results == "") {
-        res.status(404).json({
-          message:
-            "No bookings are currently available for this registered email",
-          data: "0",
+        // Run SQL query with provided value:
+        db.query(query, [email], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'No bookings are currently available for this registered email', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "The following bookings exist for the registered email that was provided",
+                        data: results,
+                    });
+            }
         });
-      }
+
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
 
       // Handle for when 1 or more results are returned:
       else {
@@ -455,110 +477,42 @@ app.post("/api/v1/user/updatePromotion/", (req, res) => {
     const userID = req.body.userID;
     const toggle = req.body.toggle;
 
-    // Print values to console (for debugging):
-    console.log("userID:", userID);
-    console.log("toggle:", toggle);
+        // Grab values from body of json request:
+        //console.log(req.body);
+        const userID = req.body.userID;
+        const toggle = req.body.toggle;
 
     // Define SQL query:
     const query =
       "UPDATE REGISTERED_USER SET promotionAlert = ? WHERE userID = ?";
 
-    // Run SQL query with provided value:
-    db.query(query, [toggle, userID], (error, results) => {
-      // Handle for when no results are returned
-      if (results == null || results == "") {
-        res.status(404).json({
-          message: "Promotion was not upated successfully",
-          data: "0",
+        // Define SQL query:
+        const query = 'UPDATE REGISTERED_USER SET promotionAlert = ? WHERE userID = ?';
+
+        // Run SQL query with provided value:
+        db.query(query, [toggle, userID], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'Promotion was not upated successfully', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "Promotion was updated successfully",
+                        data: results,
+                    });
+            }
         });
-      }
 
-      // Handle for when 1 or more results are returned:
-      else {
-        console.log(results);
-        res.status(200).json({
-          success: true,
-          message: "Promotion was updated successfully",
-          data: results,
-        });
-      }
-    });
-
-    // Catch errors with a response message:
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-});
-
-//---------------------------------------------------------------------------------------------------------------------------
-// API SQL route for adding users into the system (client provides 'firstName', 'lastName', 'birthdate', 'email', 'street', 'city', 'province', 'password', 'userType'):
-app.post("/api/v1/user/createUser/", (req, res) => {
-  try {
-    // Grab values from body of json request:
-    //console.log(req.body);
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const birthdate = req.body.birthdate;
-    const email = req.body.email;
-    const street = req.body.street;
-    const city = req.body.city;
-    const province = req.body.province;
-    const password = req.body.password;
-    const userType = req.body.userType;
-
-    // Print values to console (for debugging):
-    console.log("firstName:", firstName);
-    console.log("lastName:", lastName);
-    console.log("birthdate:", birthdate);
-    console.log("email:", email);
-    console.log("street:", street);
-    console.log("city:", city);
-    console.log("province:", province);
-    console.log("password:", password);
-    console.log("userType:", userType);
-
-    // Define SQL query:
-    const query = `INSERT INTO USER (firstName, lastName, birthdate, email, street, city, province, password, userType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-    // Run SQL query with provided value:
-    db.query(
-      query,
-      [
-        firstName,
-        lastName,
-        birthdate,
-        email,
-        street,
-        city,
-        province,
-        password,
-        userType,
-      ],
-      (error, results) => {
-        // Handle for when no results are returned
-        if (results == null || results == "") {
-          res.status(404).json({
-            message: "The user was NOT successfully added to the database",
-            data: "0",
-          });
-        }
-
-        // Handle for when 1 or more results are returned:
-        else {
-          console.log(results);
-          res.status(200).json({
-            success: true,
-            message: "The user has been successfully added to the database'",
-            data: results,
-          });
-        }
-      }
-    );
-
-    // Catch errors with a response message:
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
 });
