@@ -21,7 +21,7 @@ const MySeatMapComponent = () => {
             <SeatMap rows={rows} maxReservableSeats={3} alpha />,
             document.getElementById('app')
         )
-        );
+    );
 
 };
 
