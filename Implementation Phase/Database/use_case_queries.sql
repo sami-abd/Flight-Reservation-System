@@ -21,7 +21,7 @@ DELETE FROM BOOKING WHERE bookingID = 1; -- user input
 -- BROWSE PASSENGER LIST BY AIRLINE_AGENT AND FLIGHT ATTENDANT
 SELECT bookingID, firstName, LastName, email, seatID
 FROM BOOKING 
-WHERE flightID = 1; -- user input 
+WHERE flightID = 20; -- user input 
 
 -- USER REGISTRATION 
 INSERT INTO USER (
@@ -88,13 +88,13 @@ DELETE FROM USER WHERE userID = 8; -- user to be deleted
 -- Browse flights id, origin, destination on a specified day
 SELECT flightID, departure, destination, time
 FROM FLIGHT
-WHERE date = "2023-12-20"; -- user input
+WHERE date = "2023/12/20"; -- user input
 
 -- Browse list of crew on a flight
 SELECT FLIGHT_ATTENDANT_ASSIGNMENT.flightAttendantID, USER.firstName, USER.lastName
 FROM FLIGHT_ATTENDANT_ASSIGNMENT
 JOIN USER ON FLIGHT_ATTENDANT_ASSIGNMENT.flightAttendantID = USER.userID
-WHERE flightID = 1; -- user input 
+WHERE flightID = 50; -- user input 
 
 -- Browse list of aircrafts a company owns 
 SELECT companyID FROM COMPANY WHERE name = "WestJet"; -- read companyID from company name

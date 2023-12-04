@@ -1,9 +1,7 @@
 /*
 Create entire FlightReservation Database
 */
-drop database `companyensf608`;
-create database `companyensf608`;
-use companyensf608;
+
 CREATE TABLE COMPANY (
 	companyID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
@@ -117,9 +115,9 @@ CREATE TABLE USER (
 CREATE TABLE REGISTERED_USER (
 	userID INT PRIMARY KEY,
     FOREIGN KEY (userID) REFERENCES USER(userID) ON DELETE CASCADE,
-	companyCard TINYINT,
-    membership TINYINT,
-    promotionAlert TINYINT
+	companyCard TINYINT DEFAULT 0,
+    membership TINYINT DEFAULT 0,
+    promotionAlert TINYINT DEFAULT 1
 );
 
 CREATE TABLE AIRLINE_AGENT (
@@ -200,5 +198,27 @@ END;
 //
 DELIMITER ;
 
+-- Create trigger to check seat availability before booking is created
+DELIMITER //
+
+CREATE TRIGGER check_seat_availability_before_booking
+BEFORE INSERT ON BOOKING
+FOR EACH ROW
+BEGIN
+    DECLARE is_seat_available TINYINT;
+
+    -- Check if the seat is available for the given flight
+    SELECT isAvailable INTO is_seat_available
+    FROM SEAT
+    WHERE flightID = NEW.flightID AND seatID = NEW.seatID;
+
+    -- If the seat is not available, raise an error or handle it according to your requirements
+    IF is_seat_available = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'The selected seat is not available for booking.';
+    END IF;
+END;
+//
+DELIMITER ;
 
 
