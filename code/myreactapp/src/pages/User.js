@@ -42,11 +42,14 @@ const User = () => {
       })
       .then((data) => {
         console.log(data);
-        sessionStorage.setItem("userId", data.email); // Add userId to sessionStorage, which is used for many purposes
-        sessionStorage.setItem("firstName", data.firstName); // Storages name in sessionStorage for display in Header
-        console.log(data);
+        const userData = data.data[0]; // Access the first element of the data array
+        sessionStorage.setItem("userId", userData.email); // Use userData instead of data
+        sessionStorage.setItem("firstName", userData.firstName); // Use userData instead of data
+        console.log("Received data:", userData); // Log userData
+        console.log("First Name:", userData.firstName); // Log the firstName from userData
         // window.location.reload();
       })
+
       .catch((error) => {
         alert(error);
       });
