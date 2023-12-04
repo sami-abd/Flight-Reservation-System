@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: "127.0.0.1",
     user: "ensf614",
-    password: "ensf614",
+    password: "root",
     database: "companyensf608",
 });
 
@@ -554,18 +554,21 @@ app.post("/api/v1/user/removeAircraft/", (req, res) => {
     try {
         // Grab values from body of json request:
         //console.log(req.body);
-        const aircraftID = req.body.aircraftID;
+        const aircraftID = req.body.selectedAirID;
 
         // Print values to console (for debugging):
         console.log("aircraftID:", aircraftID);
 
         // Define SQL query:
         const query = `DELETE FROM AIRCRAFT WHERE aircraftID = ?`;
+        const query2 = `SELECT email FROM booking, flight WHERE 
+        booking.flightID = flight.flightID AND aircraftID = ? `;
 
         // Run SQL query with provided value:
-        db.query(query, [aircraftID], (error, results) => {
+        db.query(query2, [aircraftID], (error, results) => {
             // Handle for when no results are returned
             if (error) {
+                console.log(error)
                 res
                     .status(404)
                     .json({
@@ -576,17 +579,31 @@ app.post("/api/v1/user/removeAircraft/", (req, res) => {
 
             // Handle for when 1 or more results are returned:
             else {
-                console.log(results);
-                res.status(200).json({
-                    success: true,
-                    message: "The aircraft has been successfully removed",
-                    data: results,
+                db.query(query, [aircraftID], (error2, results2) => {
+                    if (error2) {
+                        console.log(error2)
+                        res
+                            .status(404)
+                            .json({
+                                message: "The aircraft was NOT successfully removed",
+                                data: "0",
+                            });
+                    }
+                    else {
+                        console.log(results2);
+                        res.status(200).json({
+                            success: true,
+                            message: "The aircraft has been successfully removed",
+                            data: results,
+                            message2: "Sucess"
+                        });
+                    }
                 });
             }
         });
-
-        // Catch errors with a response message:
-    } catch (error) {
+    }
+    catch (error) {
+        // Catch errors with a response message: catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
@@ -672,6 +689,41 @@ app.post("/api/v1/user/removeCrew/", (req, res) => {
                 res.status(200).json({
                     success: true,
                     message: "The crew member has been successfully removed",
+                    data: results,
+                });
+            }
+        });
+
+        // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
+
+app.post("/api/v1/getAir", (req, res) => {
+    try {
+
+        // Define SQL query:
+        const query1 = 'SELECT * FROM aircraft';
+
+        // Run SQL query with provided value:
+        db.query(query1, (error, results) => {
+            // Handle for when no results are returned
+            if (error) {
+                res.status(404).json({
+                    message:
+                        "Cant retreieve Air Crafts",
+                    data: "0",
+                });
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                res.status(200).json({
+                    success: true,
+                    message:
+                        "The crew has been successfully assigned to the specified flight",
                     data: results,
                 });
             }

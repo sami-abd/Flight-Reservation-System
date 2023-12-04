@@ -26,7 +26,7 @@ const Adminpage = () => {
   // Functional Part of Adminpage
   const maintainAir = (e) => {
     e.preventDefault();
-    navigate('/selectFlights');
+    navigate('/MaintainAir');
   };
 
   // Functional Part of Adminpage
@@ -67,9 +67,9 @@ const Adminpage = () => {
           </div>
         ) : (
           <div>
-            <div>
-              <button onClick={() => maintainAir()}>Maintain Aircraft</button>
-            </div>
+            <form onSubmit={maintainAir}>
+              <button type='submit'>Maintain Aircraft</button>
+            </form>
             <div>
               <button onClick={() => maintainFlights()}>Maintain Flights</button>
             </div>
