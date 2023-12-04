@@ -29,9 +29,9 @@ CREATE TABLE FLIGHT (
     date DATE NOT NULL,
     time TIME NOT NULL,
     aircraftID INT NOT NULL,
-	FOREIGN KEY (aircraftID) REFERENCES AIRCRAFT(aircraftID),
+	FOREIGN KEY (aircraftID) REFERENCES AIRCRAFT(aircraftID) ON DELETE CASCADE,
     Capacity INT NOT NULL
-);
+);AIRCRAFT
 
 DELIMITER //
 CREATE TRIGGER update_flight_capacity_trigger
