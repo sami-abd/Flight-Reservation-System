@@ -1,17 +1,22 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const PaymentConfirmation = () => {
-  // Use React Router's useLocation hook to access the state passed from the Payment component
   const location = useLocation();
-  const bookingInfo = location.state?.bookingInfo; // Ensure you pass this state from the Payment component
+  const bookingInfo = location.state?.bookingInfo;
 
-  // If there's no booking information, you can redirect or display a message
+  useEffect(() => {
+    if (bookingInfo) {
+      // Store the booking information in session storage
+      sessionStorage.setItem("booking", JSON.stringify(bookingInfo));
+    }
+  }, [bookingInfo]); // The effect depends on bookingInfo
+
   if (!bookingInfo) {
     return <div>No booking information available.</div>;
   }
 
-  // Add a simple style object for centering text
   const centerStyle = {
     textAlign: "center",
   };
@@ -21,7 +26,13 @@ const PaymentConfirmation = () => {
       <h1>Congratulations on Your Booking!</h1>
       <div className="booking-details">
         <p>
-          <strong>Flight ID:</strong> {bookingInfo.flightId}
+          <strong>Flight ID:</strong> {bookingInfo.flightID}
+        </p>
+        <p>
+          <strong>Seat:</strong> {bookingInfo.seat}
+        </p>
+        <p>
+          <strong>Cost:</strong> {bookingInfo.cost}
         </p>
         <p>
           <strong>First Name:</strong> {bookingInfo.firstName}
@@ -33,13 +44,9 @@ const PaymentConfirmation = () => {
           <strong>Email:</strong> {bookingInfo.email}
         </p>
         <p>
-          <strong>Seat ID:</strong> {bookingInfo.seatId}
+          <strong>Insurance:</strong> {bookingInfo.hasInsurance ? "Yes" : "No"}
         </p>
-        <p>
-          <strong>Insurance:</strong>{" "}
-          {bookingInfo.hasInsurance ? "Included" : "Not included"}
-        </p>
-        {/* Add more details as needed */}
+        {/* You can add more details as needed */}
       </div>
     </div>
   );

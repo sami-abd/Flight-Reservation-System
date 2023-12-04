@@ -46,17 +46,14 @@ app.post("/api/v1/user/registered/", (req, res) => {
     const password = req.body.password;
     let names = "";
 
-<<<<<<< HEAD
         // Now you have the email and password, and you can use them as needed:
         //console.log("Email:", email);
         //console.log("Password:", password);
         const query = `SELECT * FROM USER WHERE email = '${email}' AND password = '${password}'`;
-=======
     // Now you have the email and password, and you can use them as needed:
     //console.log("Email:", email);
     //console.log("Password:", password);
     const query = `SELECT * FROM USER WHERE email = '${email}' AND password = '${password}'`;
->>>>>>> 35b86f42d9cdfbcc6f8f114ed1c4dfd0bd3445b6
 
     // Run SQL query with provided value:
     db.query(query, (error, results) => {
@@ -197,7 +194,6 @@ app.post("/api/v1/user/getPassengerList/", (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for a booking to be removed from the booking table (client provides 'bookingID'):
@@ -511,8 +507,6 @@ app.post("/api/v1/user/createUser/", (req, res) => {
 });
 
 
-=======
->>>>>>> 35b86f42d9cdfbcc6f8f114ed1c4dfd0bd3445b6
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for admin request to add a new flight into the system (client provides 'departure', 'destination', 'date', 'aircraftID'):
 app.post("/api/v1/user/addFlight/", (req, res) => {
@@ -575,7 +569,6 @@ app.post("/api/v1/user/addFlight/", (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 
 //Remove flight
 //---------------------------------------------------------------------------------------------------------------------------
@@ -596,7 +589,6 @@ app.post("/api/v1/user/removeFlight/", (req, res) => {
 
         // Run SQL query with provided value: 
         db.query(query2, [flightID], (error, results) => {
-=======
 //---------------------------------------------------------------------------------------------------------------------------
 // API SQL route for a booking to be removed from the booking table (client provides 'bookingID'):
 app.post("/api/v1/user/removeBooking/", (req, res) => {
@@ -618,7 +610,6 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
 
         // Run SQL query with provided value:
         db.query(query, [bookingID], (error, results) => {
->>>>>>> 35b86f42d9cdfbcc6f8f114ed1c4dfd0bd3445b6
 
             // Handle for when no results are returned
             if (results == null || results == "") {
@@ -637,20 +628,16 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
                     });
             }
         });
-<<<<<<< HEAD
     
     // Catch errors with a response message:
-=======
 
         // Catch errors with a response message:
->>>>>>> 35b86f42d9cdfbcc6f8f114ed1c4dfd0bd3445b6
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
 
-<<<<<<< HEAD
 //Add aircraft
 
 //Remove aircraft
@@ -660,7 +647,6 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
 //Remove crew
 
 //Update 
-=======
       // Handle for when 1 or more results are returned:
       else {
         console.log(results);
@@ -878,4 +864,3 @@ app.post("/api/v1/user/updatePromotion/", (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
->>>>>>> 35b86f42d9cdfbcc6f8f114ed1c4dfd0bd3445b6
