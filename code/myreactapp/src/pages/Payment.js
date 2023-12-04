@@ -37,7 +37,7 @@ const Payment = () => {
 
     try {
       // Send a POST request to your backend endpoint
-      const response = await fetch("http://localhost:8081/api/bookings", {
+      const response = await fetch("http://localhost:8081/api/v1/user/addBooking/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
