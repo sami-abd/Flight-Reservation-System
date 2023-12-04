@@ -1,4 +1,4 @@
-// Set up express and data
+// Set up express and database
 const express = require("express");
 
 const mysql = require("mysql2");
@@ -252,7 +252,7 @@ app.post("/api/v1/user/removeBooking/", (req, res) => {
         console.log("bookingID:", bookingID);
 
 
-/*         //-------------------------------------------------------
+/*      //-------------------------------------------------------
         // Define SQL query #1: (update seat to empty) --> Do this before query #2
         const query1 = `UPDATE SEAT AS S
                         JOIN BOOKING AS B ON S.flightID = B.flightID AND S.seatID = B.seatID
@@ -354,14 +354,11 @@ app.post("/api/v1/user/addBooking/", (req, res) => {
                     .status(200)
                     .json({
                         success: true,
-                        message: "The booking has been successfully added and seat has been updated to 'unavailable'",
+                        message: "The booking has been successfully added",
                         data: results,
                     });
             }
         });
-
-
-
 
         //-------------------------------------------------------
         // Define SQL query #2: (update seat to empty) --> Do this before query #2
@@ -391,8 +388,6 @@ app.post("/api/v1/user/addBooking/", (req, res) => {
       //      }
      //   });
 
-
-    
     // Catch errors with a response message:
     } catch (error) {
         console.error(error);
@@ -495,3 +490,61 @@ app.post("/api/v1/user/updatePromotion/", (req, res) => {
 });
 
 
+//---------------------------------------------------------------------------------------------------------------------------
+// API SQL route for adding users into the system (client provides 'firstName', 'lastName', 'birthdate', 'email', 'street', 'city', 'province', 'password', 'userType'):
+app.post("/api/v1/user/createUser/", (req, res) => {
+    try {
+
+        // Grab values from body of json request:
+       //console.log(req.body);
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const birthdate = req.body.birthdate;
+        const email = req.body.email;
+        const street = req.body.street;
+        const city = req.body.city;
+        const province = req.body.province;
+        const password = req.body.password;
+        const userType = req.body.userType;
+
+        // Print values to console (for debugging):
+        console.log("firstName:", firstName);
+        console.log("lastName:", lastName);
+        console.log("birthdate:", birthdate);
+        console.log("email:", email);
+        console.log("street:", street);
+        console.log("city:", city);
+        console.log("province:", province);
+        console.log("password:", password);
+        console.log("userType:", userType);
+
+        // Define SQL query:
+        const query = `INSERT INTO USER (firstName, lastName, birthdate, email, street, city, province, password, userType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        // Run SQL query with provided value: 
+        db.query(query, [firstName, lastName, birthdate, email, street, city, province, password, userType], (error, results) => {
+
+            // Handle for when no results are returned
+            if (results == null || results == "") {
+                res.status(404).json({ message: 'The user was NOT successfully added to the database', data: '0' })
+            }
+
+            // Handle for when 1 or more results are returned:
+            else {
+                console.log(results)
+                res
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "The user has been successfully added to the database'",
+                        data: results,
+                    });
+            }
+        });
+
+    // Catch errors with a response message:
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+});
