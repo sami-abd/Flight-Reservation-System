@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "ISAM@isam",
+  password: "",
   database: "companyensf608",
 });
 
@@ -777,57 +777,6 @@ app.post("/api/v1/user/removeBooking2/", (req, res) => {
     });
 
     // Catch errors with a response message:
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-});
-
-app.post("/api/v1/user/getUserID", (req, res) => {
-  try {
-    const email = req.body.email;
-    const query = "SELECT userID FROM USER WHERE email = ?";
-    db.query(query, [email], (error, results) => {
-      if (error) {
-        res
-          .status(500)
-          .json({ success: false, message: "Internal Server Error" });
-      } else if (results.length === 0) {
-        res.status(404).json({ success: false, message: "User not found" });
-      } else {
-        res.status(200).json({ success: true, data: results[0].userID });
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-});
-app.post("/api/v1/user/getPromotionStatus/", (req, res) => {
-  try {
-    const userID = req.body.userID;
-
-    // Define SQL query to get the promotion status:
-    const query = "SELECT promotionAlert FROM REGISTERED_USER WHERE userID = ?";
-
-    // Execute the query:
-    db.query(query, [userID], (error, results) => {
-      if (error) {
-        res
-          .status(500)
-          .json({ success: false, message: "Internal Server Error" });
-        return;
-      }
-
-      if (results.length === 0) {
-        res.status(404).json({ success: false, message: "User not found" });
-        return;
-      }
-
-      // Assuming 'promotionAlert' is a boolean or similar field:
-      const isSubscribed = results[0].promotionAlert;
-      res.status(200).json({ success: true, isSubscribed });
-    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
