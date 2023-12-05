@@ -14,6 +14,7 @@ import Payment from "./pages/Payment";
 import PaymentConfirmation from "./pages/PaymentConfirmation";
 import SelectSeat from "./pages/SelectSeat";
 import MyAccount from "./pages/MyAccount";
+import MaintainAir from "./pages/MaintainAir";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="PaymentConfirmation" element={<PaymentConfirmation />} />
           <Route path="SelectSeat" element={<SelectSeat />} />
           <Route path="MyAccount" element={<MyAccount />} />
+          <Route path="MaintainAir" element={<MaintainAir />} />
         </Route>
       </Routes>
     </BrowserRouter>
