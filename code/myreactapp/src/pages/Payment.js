@@ -47,29 +47,39 @@ const Payment = () => {
 
     try {
       // Send a POST request to your backend endpoint
-      const response = await fetch("http://localhost:8081/api/v1/user/addBooking/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookingInfo),
-      });
+      const response = await fetch(
+        "http://localhost:8081/api/v1/user/addBooking/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingInfo),
+        }
+      );
 
       // Check if the booking was successful
+      // Check if the booking was successful
       if (response.ok) {
+        // Store booking details in sessionStorage
+        sessionStorage.setItem("bookingInfo", JSON.stringify(bookingInfo));
+
         // Navigate to a success page or show confirmation
-        // After successful payment
         navigate("/PaymentConfirmation", { state: { bookingInfo } });
       } else {
         // Handle non-success responses
-        // alert("Booking failed. Please try again.");// uncomment once backend is ready
-        navigate("/PaymentConfirmation", { state: { bookingInfo } }); // remove once backend is ready
+        alert("An error occurred during booking. Please try again."); // Notify the user
+
+        // Refresh the page
+        window.location.reload();
       }
     } catch (error) {
       // Handle any errors that occurred during the request
-      //   console.error("Error during booking:", error); // uncomment once backend is ready
-      //   alert("An error occurred during booking.");    // uncomment once backend is ready
-      navigate("/PaymentConfirmation", { state: { bookingInfo } }); //remove once backend is ready
+      console.error("Error during booking:", error); // Log the error
+      alert("An error occurred during booking. Please try again."); // Notify the user
+
+      // Refresh the page
+      window.location.reload();
     }
   };
 

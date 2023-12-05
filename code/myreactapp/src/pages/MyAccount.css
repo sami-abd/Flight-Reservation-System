@@ -18,15 +18,32 @@
   margin: 5px 0;
 }
 .popup {
-  position: absolute;
-  left: 100%; /* Adjust as needed */
-  top: 0; /* Adjust as needed */
+  position: fixed; /* or 'absolute' */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 10px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 100;
+}
+
+/* Existing styles... */
+
+.subscription-text {
+  font-size: 1.2em; /* Larger text */
+  font-weight: bold; /* Bold text */
+  margin-bottom: 10px; /* Spacing between text and button */
+  text-align: center; /* Center-align the text */
+}
+
+.subscription-section {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center-align items horizontally */
+  margin-top: 20px; /* Adjust as needed */
 }
 
 /* Add more styles as needed */

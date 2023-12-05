@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Adminpage from "./pages/Adminpage";
-import SelectFlights from "./pages/SelectFlight";
+import SelectFlights from "./pages/SelectFlights";
 import Registration from "./pages/Registration";
 import Payment from "./pages/Payment";
 import PaymentConfirmation from "./pages/PaymentConfirmation";

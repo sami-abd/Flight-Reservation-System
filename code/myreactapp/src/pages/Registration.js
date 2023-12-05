@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
@@ -19,13 +19,12 @@ const Registration = () => {
   // Function to update state variables
   const updateFirstName = (e) => setFirstName(e.target.value);
   const updateLastName = (e) => setLastName(e.target.value);
-  const updateDateOfBirth = (e) => setDateOfBirth(e.target.value);
+  const updateDateOfBirth = (date) => setDateOfBirth(date);
   const updateEmail = (e) => setEmail(e.target.value);
   const updatePassword = (e) => setPassword(e.target.value);
   const updateStreet = (e) => setStreet(e.target.value);
   const updateCity = (e) => setCity(e.target.value);
   const updateProvince = (e) => setProvince(e.target.value);
-
 
   // Function to handle registration
   const handleRegistration = async () => {
@@ -34,7 +33,12 @@ const Registration = () => {
       alert("Please fill in all fields.");
       return;
     }
-    const FdateOfBirth = dateOfBirth && dateOfBirth.toLocaleDateString('en-CA'); // Adjust the locale as needed
+    // Check if password contains only digits
+    if (!/^\d+$/.test(password)) {
+      alert("Password must contain only numbers.");
+      return;
+    }
+    const FdateOfBirth = dateOfBirth && dateOfBirth.toLocaleDateString("en-CA"); // Adjust the locale as needed
 
     // Data to be sent to the backend
     const userData = {
@@ -50,13 +54,16 @@ const Registration = () => {
 
     try {
       // Send a POST request to your backend endpoint
-      const response = await fetch("http://localhost:8081/api/v1/user/createUser/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        "http://localhost:8081/api/v1/user/createUser/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       // Check if the registration was successful
       if (response.ok) {

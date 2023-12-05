@@ -13,7 +13,6 @@ const Adminpage = () => {
   const [adminPass, setAdminPass] = useState();
   const [authenticate, setAuthenticate] = useState(false);
 
-
   /**
    * Secret password to unlock Admin functionalties
    */
@@ -26,26 +25,22 @@ const Adminpage = () => {
   // Functional Part of Adminpage
   const maintainAir = (e) => {
     e.preventDefault();
-    navigate('/MaintainAir');
+    navigate("/MaintainAir");
   };
 
   // Functional Part of Adminpage
   const maintainFlights = (e) => {
     e.preventDefault();
-    navigate('/selectFlights');
+    navigate("/selectFlights");
   };
 
   // Functional Part of Adminpage
   const maintainCrew = (e) => {
     e.preventDefault();
-    navigate('/selectFlights');
+    navigate("/selectFlights");
   };
 
   // Functions to send requests to server
-
-
-
-
 
   return (
     <div className="adminpage">
@@ -68,17 +63,19 @@ const Adminpage = () => {
         ) : (
           <div>
             <form onSubmit={maintainAir}>
-              <button type='submit'>Maintain Aircraft</button>
+              <button type="submit">Maintain Aircraft</button>
             </form>
             <div>
-              <button onClick={() => maintainFlights()}>Maintain Flights</button>
+              <button onClick={(e) => maintainFlights(e)}>
+                Maintain Flights
+              </button>
             </div>
             <div>
-              <button onClick={() => maintainCrew()}>Maintain Crew</button>
+              <button onClick={(e) => maintainCrew(e)}>Maintain Crew</button>
             </div>
           </div>
-        )
-        }</div>
+        )}
+      </div>
     </div>
   );
 };

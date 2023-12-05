@@ -47,7 +47,7 @@ const User = () => {
         sessionStorage.setItem("firstName", userData.firstName); // Use userData instead of data
         console.log("Received data:", userData); // Log userData
         console.log("First Name:", userData.firstName); // Log the firstName from userData
-        // window.location.reload();
+        window.location.reload();
       })
 
       .catch((error) => {
