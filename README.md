@@ -1,4 +1,4 @@
-# 614-Final-Project
+# Flight Reservation System
 # Project Overview
 A collaborative full-stack flight reservation system developed at the University of Calgary, now forked for further enhancements and personal development. Aiming to improve features, code structure, and implement best practices.
 ## Folder Structure 
