@@ -41,7 +41,7 @@ All code for frontend and backend are in code folder (Except for SQL files that 
 ## Technologies Used
 - **Frontend**: React, HTML, CSS
 - **Backend**: Node.js, Express
-- **Database**: MongoDB
+- **Database**: MySQL
 - **Version Control**: Git
 
 ## Contributing
